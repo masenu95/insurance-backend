@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('agents', function (Blueprint $table) {
+        Schema::create('insurance_companies', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('company_code');
+            $table->string('email');
+            $table->string('phone');
+            $table->string('logo_url');
+            $table->string('logo_path');
             $table->unsignedBigInteger('user_id');
-            $table->string('region');
-            $table->string('district');
-            $table->string('idtype');
-            $table->string('idno');
-            $table->string('commission_rate');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('agents');
+        Schema::dropIfExists('insurance_companies');
     }
 };

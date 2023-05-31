@@ -4,32 +4,32 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateCommunicationsTable extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('agents', function (Blueprint $table) {
+        Schema::create('communications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('region');
-            $table->string('district');
-            $table->string('idtype');
-            $table->string('idno');
-            $table->string('commission_rate');
+            $table->unsignedBigInteger("no_sms");
             $table->timestamps();
-
             $table->foreign('user_id')->references('id')->on('users');
+
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('agents');
+        Schema::dropIfExists('communications');
     }
-};
+}

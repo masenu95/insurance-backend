@@ -21,6 +21,8 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger("insurance_type_id"); //insurance type eg Motor, Fire...
             $table->unsignedBigInteger("insurance_product_id"); //product code
             $table->unsignedBigInteger("insurance_coverage_id"); //risk code
+            $table->unsignedBigInteger("insurance_company_id");
+            $table->unsignedBigInteger('agent_id');
 
             $table->string("request_id"); //transaction id
             $table->string("company_code", 6)->comment("assigned by TIRA"); //assigned by TIRA
@@ -109,12 +111,13 @@ class CreateTransactionsTable extends Migration
             $table->string("payment_network")->nullable();
             $table->integer('is_deleted')->default('0');
 
-            $table->foreign('user_id')->references('id')->on('users'); //user id
-            $table->foreign('branch_id')->references('id')->on('branches'); //user id
+            $table->foreign('user_id')->references('id')->on('users'); ////user id
             $table->foreign('customer_id')->references('id')->on('customers'); //user id
             $table->foreign('insurance_type_id')->references('id')->on('insurance_types'); //user id
             $table->foreign('insurance_product_id')->references('id')->on('insurance_products'); //product
             $table->foreign('insurance_coverage_id')->references('id')->on('insurance_coverages'); //coverage
+            $table->foreign('insurance_company_id')->references('id')->on('insurance_companies');
+            $table->foreign('agent_id')->references('id')->on('agents');
 
             $table->timestamps();
         });

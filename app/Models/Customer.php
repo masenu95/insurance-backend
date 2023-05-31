@@ -10,17 +10,13 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = ['user_id','region_id','district_id','full_name','birth_date','customer_type','id_number','id_type','gender','country_code','street','phone_number','fax','postal_address','email'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
-    }
 
     public function region(): BelongsTo
     {

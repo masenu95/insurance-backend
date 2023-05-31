@@ -19,7 +19,6 @@ class CreateCustomersTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('region_id');
             $table->unsignedBigInteger('district_id');
-            $table->unsignedBigInteger('branch_id');
 
             $table->string('full_name', 100);
             $table->date('birth_date');
@@ -39,7 +38,6 @@ class CreateCustomersTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('region_id')->references('id')->on('regions');
             $table->foreign('district_id')->references('id')->on('districts');
-            $table->foreign('branch_id')->references('id')->on('branches');
         });
     }
 

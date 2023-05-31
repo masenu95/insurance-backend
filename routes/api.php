@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InsuranceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// // Agent Only
+Route::middleware('auth:sanctum')->group(function () {
+
+   Route::post('/create-motor-detail',[InsuranceController::class,'createMotor']);
+
+   Route::resource('customer',CustomerController::class);
 });
 
 
@@ -26,3 +31,8 @@ Route::get('insurance-product/{id}',[InsuranceController::class,'getInsurancePro
 
 
 Route::get('insurance-coverage/{id}',[InsuranceController::class,'getInsuranceCoverage']);
+
+Route::get('regions',[InsuranceController::class,'getRegion']);
+Route::get('get-district/{id}',[InsuranceController::class,'district']);
+
+

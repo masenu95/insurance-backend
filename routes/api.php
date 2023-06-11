@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InsuranceController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,5 +35,7 @@ Route::get('insurance-coverage/{id}',[InsuranceController::class,'getInsuranceCo
 
 Route::get('regions',[InsuranceController::class,'getRegion']);
 Route::get('get-district/{id}',[InsuranceController::class,'district']);
+
+Route::post('upload-image',[UploadController::class,'uploadMotorImage']);
 
 

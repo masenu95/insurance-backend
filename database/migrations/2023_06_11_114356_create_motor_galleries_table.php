@@ -15,12 +15,19 @@ class CreateMotorGalleriesTable extends Migration
     {
         Schema::create('motor_galleries', function (Blueprint $table) {
             $table->id();
-
             $table->string('transaction_id');
             $table->string('name');
+            $table->string('lat')->nullable();
+            $table->string('long')->nullable();
+            $table->string('devices')->nullable();
+            $table->string('time')->nullable();
             $table->string('image_type');
             $table->timestamps();
+
+            $table->foreign('transaction_id')->reference('id')->on('transactions');
         });
+
+
     }
 
     /**

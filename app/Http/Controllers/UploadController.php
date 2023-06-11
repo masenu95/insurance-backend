@@ -22,9 +22,10 @@ class UploadController extends Controller
 
         $location = $metadata['location'];
         $time = $metadata['timeTaken'];
+        $lat = $metadata['lat'];
+        $long = $metadata['long'];
 
-
-        return response()->json(['url'=>$url,'location'=>$location,'time'=>$time], 200);
+        return response()->json(['url'=>$url,'location'=>$location,'time'=>$time,'lat'=>$lat,'long'=>$long], 200);
 
 
     }

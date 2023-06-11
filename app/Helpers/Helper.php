@@ -155,8 +155,10 @@ class Helper
 {
     $metadata = exif_read_data(Storage::path($path));
 
-    $location = null;
-    $timeTaken = null;
+    $location = 'undefined';
+    $timeTaken = 'undefined';
+    $latitude = 'undefined';
+    $longitude = 'undefined';
 
     if (isset($metadata['GPSLatitude']) && isset($metadata['GPSLongitude'])) {
         $latitude = $metadata['GPSLatitude'];
@@ -174,6 +176,8 @@ class Helper
     return [
         'location' => $location,
         'timeTaken' => $timeTaken,
+        'lat'=>$latitude,
+        'long'=>$longitude,
     ];
 }
 

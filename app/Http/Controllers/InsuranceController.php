@@ -671,16 +671,7 @@ class InsuranceController extends Controller
 
                 $response_data['transaction_id'] = $updatetransaction;
 
-            if(Auth::user()->role == "agent"  && $vunapoint > 0){
-                //save vuna point
-                // $ins_vuna = new VunaPoint;
-                // $ins_vuna->user_id = Auth::user()->id;
-                // $ins_vuna->agent_id = Auth::user()->user_id;
-                // $ins_vuna->transaction_id = $updatetransaction;
-                // $ins_vuna->quantity = $vunapoint;
-                // $ins_vuna->status = "Inactive";
-                // $ins_vuna->save();
-            }
+
 
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MotorGallery;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +59,48 @@ class MotorController extends Controller
             "insuranceproductid"=>'required',
             "coverageid"=>'required',
             "requestid"=>'required',
+            "vfi_url"=>'required',
+            "vfi_path"=>'required',
+            "vfi_lat"=>'required',
+            "vfi_long"=>'required',
+            "vfi_time"=>'required',
+            "vfi_location"=>'required',
+            "vbi_url"=>'required',
+            "vbi_path"=>'required',
+            "vbi_location"=>'required',
+            "vbi_time"=>'required',
+            "vbi_lat"=>'required',
+            "vbi_long"=>'required',
+            "vlsi_url"=>'required',
+            "vlsi_path"=>'required',
+            "vlsi_lat"=>'required',
+            "vlsi_long"=>'required',
+            "vlsi_location"=>'required',
+            "vlsi_time"=>'required',
+            "vrsi_url"=>'required',
+            "vrsi_path"=>'required',
+            "vrsi_location"=>'required',
+            "vrsi_long"=>'required',
+            "vrsi_lat"=>'required',
+            "vrsi_time"=>'required',
+            "vdi_url"=>'required',
+            "vdi_path"=>'required',
+            "vdi_location"=>'required',
+            "vdi_long"=>'required',
+            "vdi_lat"=>'required',
+            "vdi_time"=>'required',
+            "vobi_url"=>'required',
+            "vobi_path"=>'required',
+            "vobi_location"=>'required',
+            "vobi_long"=>'required',
+            "vobi_lat"=>'required',
+            "vobi_time"=>'required',
+            "id_url"=>'required',
+            "id_path"=>'required',
+            "id_location"=>'required',
+            "id_long"=>'required',
+            "id_lat"=>'required',
+            "id_time"=>'required',
         ]);
 
      /*   if($request->input('insurance_coverage_product_type')=="IT"){
@@ -106,6 +149,94 @@ class MotorController extends Controller
                 'covernote_type' => $covernotetype,
 
         ]);
+
+
+        $gallerty = MotorGallery::create([
+            'transaction_id'=>$data->id,
+            'name'=>'Vehicle font image',
+            'url'=>$validated['vfi_url'],
+            'path'=>$validated['vfi_path'],
+            'lat'=>$validated['vfi_lat'],
+            'long'=>$validated['vfi_long'],
+            'location'=>$validated['vfi_location'],
+
+            'time'=>$validated['vfi_time'],
+        ]);
+
+        $gallery = MotorGallery::create([
+            'transaction_id'=>$data->id,
+            'name'=>'Vehicle back image',
+            'url'=>$validated['vbi_url'],
+            'path'=>$validated['vbi_path'],
+            'lat'=>$validated['vbi_lat'],
+            'long'=>$validated['vbi_long'],
+            'location'=>$validated['vbi_location'],
+
+            'time'=>$validated['vbi_time'],
+        ]);
+
+        $gallery = MotorGallery::create([
+            'transaction_id'=>$data->id,
+            'name'=>'Vehicle left side image',
+            'url'=>$validated['vlsi_url'],
+            'path'=>$validated['vlsi_path'],
+            'lat'=>$validated['vlsi_lat'],
+            'long'=>$validated['vlsi_long'],
+            'location'=>$validated['vlsi_location'],
+
+            'time'=>$validated['vlsi_time'],
+        ]);
+
+        $gallery = MotorGallery::create([
+            'transaction_id'=>$data->id,
+            'name'=>'Vehicle right side image',
+            'url'=>$validated['vrsi_url'],
+            'path'=>$validated['vrsi_path'],
+            'lat'=>$validated['vrsi_lat'],
+            'long'=>$validated['vrsi_long'],
+            'location'=>$validated['vrsi_location'],
+
+            'time'=>$validated['vrsi_time'],
+        ]);
+
+        $gallery = MotorGallery::create([
+            'transaction_id'=>$data->id,
+            'name'=>'Vehicle dashboard image',
+            'url'=>$validated['vdi_url'],
+            'path'=>$validated['vdi_path'],
+            'lat'=>$validated['vdi_lat'],
+            'long'=>$validated['vdi_long'],
+            'location'=>$validated['vdi_location'],
+
+            'time'=>$validated['vdi_time'],
+        ]);
+
+
+        $gallery = MotorGallery::create([
+            'transaction_id'=>$data->id,
+            'name'=>'Vehicle back image',
+            'url'=>$validated['vobi_url'],
+            'path'=>$validated['vobi_path'],
+            'lat'=>$validated['vobi_lat'],
+            'long'=>$validated['vobi_long'],
+            'location'=>$validated['vobi_location'],
+
+            'time'=>$validated['vobi_time'],
+        ]);
+
+
+
+        $gallery = MotorGallery::create([
+            'transaction_id'=>$data->id,
+            'name'=>'Vehicle back image',
+            'url'=>$validated['id_url'],
+            'path'=>$validated['id_path'],
+            'lat'=>$validated['id_lat'],
+            'long'=>$validated['id_long'],
+            'location'=>$validated['id_location'],
+            'time'=>$validated['id_time'],
+        ]);
+
 
         return response()->json($data, 200);
     }

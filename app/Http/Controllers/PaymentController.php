@@ -54,9 +54,9 @@ class PaymentController extends Controller
 
           //  $client = new Client($baseUrl, $api_key, $api_secret);
 
-            //$resp = json_decode($res);
+            $resp = json_decode($res);
 
-            return $res;
+            return $resp;
 
             if($resp->result == "SUCCESS"){
 

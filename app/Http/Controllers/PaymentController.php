@@ -46,13 +46,9 @@ class PaymentController extends Controller
                 "amount" => "$amount",
                 "vendor" => env('SELCOM_API_VENDOR'),
                 "currency" => "TZS",
-                "payer_remarks" => "",
                 "merchant_remarks" => "",
                 "buyer_name"=>'masenu',
-                "payer_email" => "",
                 "buyer_phone" => "255713497596",
-
-
                 "buyer_email"=> "john@example.com",
                 "buyer_name"=> "John Joh",
                 "buyer_userid"=> "",

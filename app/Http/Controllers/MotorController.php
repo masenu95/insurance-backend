@@ -214,7 +214,7 @@ class MotorController extends Controller
 
         $gallery = MotorGallery::create([
             'transaction_id'=>$data->id,
-            'name'=>'Vehicle back image',
+            'name'=>'Vehicle open bonet image',
             'url'=>$validated['vobi_url'],
             'path'=>$validated['vobi_path'],
             'lat'=>$validated['vobi_lat'],
@@ -228,7 +228,7 @@ class MotorController extends Controller
 
         $gallery = MotorGallery::create([
             'transaction_id'=>$data->id,
-            'name'=>'Vehicle back image',
+            'name'=>'id image',
             'url'=>$validated['id_url'],
             'path'=>$validated['id_path'],
             'lat'=>$validated['id_lat'],

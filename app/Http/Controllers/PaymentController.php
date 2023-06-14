@@ -16,7 +16,7 @@ class PaymentController extends Controller
     public function mobile(Request $request){
 
 
-            try{
+            //try{
 
             $api_key = $_ENV['SELCOM_API_KEY'];
             $api_secret = $_ENV['SELCOM_API_SECRET'];
@@ -42,21 +42,54 @@ class PaymentController extends Controller
                 'Digest-Method'=> 'HS256',
                 'Timestamp' => "$timestamp"
             ])->post('https://apigw.selcommobile.com/v1/checkout/create-order-minimal', [
-                "order_id" => "$transid",
+                "order_id" => $transid,
                 "amount" => "$amount",
+                "vendor" => env('SELCOM_API_VENDOR'),
                 "currency" => "TZS",
                 "payer_remarks" => "",
                 "merchant_remarks" => "",
+                "buyer_name"=>'masenu',
                 "payer_email" => "",
-                "payer_phone" => ""
+                "buyer_phone" => "255713497596",
+
+
+                "buyer_email"=> "john@example.com",
+                "buyer_name"=> "John Joh",
+                "buyer_userid"=> "",
+                "buyer_phone"=> "255xxxxxxxxx",
+                "gateway_buyer_uuid"=> "",
+                "redirect_url"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
+                "cancel_url"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
+                "webhook"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
+                "billing.firstname" => "John",
+                "billing.lastname" => "Doe",
+                "billing.address_1" => "969 Market",
+                "billing.address_2" => "",
+                "billing.city" => "San Francisco",
+                "billing.state_or_region" => "CA",
+                "billing.postcode_or_pobox" => "94103",
+                "billing.country" => "US",
+                "billing.phone" => "255xxxxxxxxx",
+                "shipping.firstname" => "John",
+                "shipping.lastname" => "Doe",
+                "shipping.address_1" => "969 Market",
+                "shipping.address_2" => "",
+                "shipping.city" => "San Francisco",
+                "shipping.state_or_region" => "CA",
+                "shipping.postcode_or_pobox" => "94103",
+                "shipping.country" => "US",
+                "shipping.phone" => "255xxxxxxxxx",
+                "buyer_remarks"=>"None",
+                "merchant_remarks"=>"None",
+                "no_of_items"=>  3
             ]);
 
 
           //  $client = new Client($baseUrl, $api_key, $api_secret);
 
-            $resp = json_decode($res);
+           // $resp = json_decode($res);
 
-            return $resp;
+            return $res;
 
             if($resp->result == "SUCCESS"){
 
@@ -96,11 +129,11 @@ class PaymentController extends Controller
             }
 
 
-            }catch(\Exception $ex){
+            //}catch(\Exception $ex){
 
-                   return response()->json('Error', 500);
+                  // return response()->json('Error', 500);
 
-            }
+           // }
 
 
     }

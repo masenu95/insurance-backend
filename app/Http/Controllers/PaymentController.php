@@ -51,7 +51,6 @@ class PaymentController extends Controller
                 "buyer_phone" => "255713497596",
                 "buyer_email"=> "john@example.com",
                 "buyer_name"=> "John Joh",
-                "buyer_userid"=> "12",
                 "buyer_phone"=> "255xxxxxxxxx",
                 "gateway_buyer_uuid"=> "",
                 "redirect_url"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",

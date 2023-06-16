@@ -100,6 +100,7 @@ class Transaction extends Model
     'bank',
     'payment_number',
     'payment_network',
+    'company_id',
     'is_deleted'
 ];
 
@@ -148,10 +149,15 @@ class Transaction extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
-    }
+   /**
+    * Get the company that owns the Transaction
+    *
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+    */
+   public function company(): BelongsTo
+   {
+       return $this->belongsTo(Company::class, 'company_id', 'id');
+   }
 
     public function insuranceType(): BelongsTo
     {

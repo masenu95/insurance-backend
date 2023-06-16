@@ -55,24 +55,7 @@ class PaymentController extends Controller
                 "redirect_url"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
                 "cancel_url"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
                 "webhook"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
-                "billing.firstname" => "John",
-                "billing.lastname" => "Doe",
-                "billing.address_1" => "969 Market",
-                "billing.city" => "San Francisco",
-                "billing.state_or_region" => "CA",
-                "billing.postcode_or_pobox" => "94103",
-                "billing.country" => "US",
-                "billing.phone" => "255xxxxxxxxx",
-                "shipping.firstname" => "John",
-                "shipping.lastname" => "Doe",
-                "shipping.address_1" => "969 Market",
-                "shipping.city" => "San Francisco",
-                "shipping.state_or_region" => "CA",
-                "shipping.postcode_or_pobox" => "94103",
-                "shipping.country" => "US",
-                "shipping.phone" => "255xxxxxxxxx",
-                "buyer_remarks"=>"None",
-                "merchant_remarks"=>"None",
+
                 "no_of_items"=>  3
             ]);
 

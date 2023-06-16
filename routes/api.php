@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AgentController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\MotorController;
@@ -25,10 +28,10 @@ Route::middleware('auth:sanctum')->group(function () {
    Route::post('/create-motor-detail',[InsuranceController::class,'createMotor']);
 
    Route::resource('customer',CustomerController::class);
-});
 
+   Route::resource('company',CompanyController::class);
 
-Route::get('insurance-type',[InsuranceController::class,'getInsuranceType']);
+   Route::get('insurance-type',[InsuranceController::class,'getInsuranceType']);
 
 Route::get('insurance-product/{id}',[InsuranceController::class,'getInsuranceProduct']);
 
@@ -48,4 +51,18 @@ Route::post('mobile-payment',[PaymentController::class,'mobile']);
 
 Route::resource('motor',MotorController::class);
 
+Route::resource('agent',AgentController::class);
+
+Route::post('add-product',[CompanyController::class,'addProduct']);
+});
+
+
+
+
+
+
+Route::post('register', [AuthController::class,'register']);
+
+
+Route::post('get-Token', [AuthController::class,'getToken']);
 

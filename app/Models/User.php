@@ -13,7 +13,12 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
 
+
+    protected $fillable = ['username','first_name','last_name','email','phone','user_image','status','role','password'];
+
     protected $guarded = [];
+
+
 
     protected $hidden = ['password'];
 
@@ -22,13 +27,6 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
-    public function libraries(){
-        return $this->hasMany(Library::class);
-    }
-
-    public function branch(){
-        return $this->belongsTo(Branch::class,'branch_id','id');
-    }
 
 
 

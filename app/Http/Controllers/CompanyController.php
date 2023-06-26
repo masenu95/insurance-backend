@@ -91,9 +91,9 @@ class CompanyController extends Controller
             'type'=>'required',
         ]);
 
-        $data = InsuranceCompany::find($validated['company']);
+        $data = InsuranceType::find($validated['type']);
 
-        $data->types()->attach($validated['type']);
+        $data->companies()->attach($validated['company']);
 
         $data = InsuranceCompany::where('id',$validated['company'])->with('types')->first();
 

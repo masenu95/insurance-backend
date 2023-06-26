@@ -20,6 +20,6 @@ class InsuranceCompany extends Model
      */
     public function types   (): BelongsToMany
     {
-        return $this->belongsToMany(InsuranceType::class, 'insurance_type_id', 'id');
+        return $this->belongsToMany(InsuranceType::class);
     }
 }

@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class InsuranceCompany extends Model
 {
     use HasFactory;
@@ -17,10 +16,10 @@ class InsuranceCompany extends Model
     /**
      * Get all of the type for the InsuranceCompany
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongToMany
      */
-    public function types   (): HasMany
+    public function types   (): BelongsToMany
     {
-        return $this->hasMany(InsuranceType::class, 'insurance_type_id', 'id');
+        return $this->belongsToMany(InsuranceType::class, 'insurance_type_id', 'id');
     }
 }

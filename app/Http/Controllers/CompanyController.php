@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\InsuranceCompany;
+use App\Models\InsuranceType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,6 +15,22 @@ class CompanyController extends Controller
     public function index()
     {
         //
+
+        $data = InsuranceCompany::get();
+        return response()->json($data, 200);
+
+
+    }
+
+
+
+    public function getCompanyByType($id)
+    {
+        //
+
+        $data = InsuranceType::find($id);
+
+        return response()->json($data->companies, 200);
 
 
     }

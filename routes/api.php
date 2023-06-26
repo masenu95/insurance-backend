@@ -8,6 +8,7 @@ use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UploadController;
+use Faker\Provider\ar_EG\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,8 @@ Route::resource('motor',MotorController::class);
 Route::resource('agent',AgentController::class);
 
 Route::post('add-product',[CompanyController::class,'addProduct']);
+
+Route::get('insurance-company',[CompanyController::class,'getCompanyByType']);
 });
 
 

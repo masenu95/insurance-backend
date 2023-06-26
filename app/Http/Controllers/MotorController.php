@@ -55,8 +55,8 @@ class MotorController extends Controller
             "motor_type"=>'required',
             "registration_number"=>'required',
             "chassis_number"=>'required',
-            "insurancetypeid"=>'required',
-            "insuranceproductid"=>'required',
+            "insurance_type"=>'required',
+            "insurance_product"=>'required',
             "coverageid"=>'required',
             "requestid"=>'required',
             "vfi_url"=>'required',
@@ -114,7 +114,7 @@ class MotorController extends Controller
 
 
         $data = Transaction::create([
-                "make"=>$validated['name'],
+                "make"=>$validated['make'],
                 "model"=>$validated['model'],
                 "model_number"=>$validated['model_number'],
                 "body_type"=>$validated['body_type'],
@@ -132,21 +132,26 @@ class MotorController extends Controller
                 "owner_name"=>$validated['owner_name'],
                 "owner_category"=>$validated['owner_category'],
                 "owner_address"=>$validated['sitting_capacity'],
-                "motor_category"=>$validated['owner_address'],
+                "motor_category"=>$validated['motor_category'],
                 "motor_type"=>$validated['motor_type'],
                 "registration_number"=>$validated['registration_number'],
                 "chassis_number"=>$validated['chassis_number'],
                 "first_loss"=>$request->first_loss,
                 "image_reference"=>$request->imageReference,
-                "insurancetypeid"=>$validated['insurancetypeid'],
-                "insuranceproductid"=>$validated['insuranceproductid'],
-                "coverageid"=>$validated['coverageid'],
+
                 "requestid"=>$validated['requestid'],
                 'user_id'=> Auth::user()->id,
                 'addon_amount' => "0.00",
                 'addon_premium_rate' => "0.00",
                 'callback_url' => $callback,
                 'covernote_type' => $covernotetype,
+                'insurance_type_id'=>$request->insurance_type,
+                'insurance_product_id'=>$request->insurance_product,
+                'insurance_coverage_id'=>$request->insurance_coverage,
+                'insurance_company_id'=>$request->insurance_company,
+                'agent_id'=>'1',
+                'request_id'=>'1'
+
 
         ]);
 

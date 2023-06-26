@@ -89,7 +89,7 @@ class InsuranceController extends Controller
         $duration = $validated['duration'];
         $suminsured = $validated['suminsured'];
         $covernotedesc = $validated['covernotedesc'];
-        $operativeclause = $$validated['operativeclause'];
+        $operativeclause = 500;
         $insurer = $request->insurer;
         $expirydate  = $request->expirydate;
         $suminsuredequivalent = $suminsured;
@@ -152,8 +152,12 @@ class InsuranceController extends Controller
         $subpremium = 0;
         $subamount = 0;
 
+
+
         //check if non-motor or not
         if($insurancetypeid==2){
+
+
 
             if($isperset == "Yes") {
 
@@ -213,14 +217,17 @@ class InsuranceController extends Controller
                 } else if ($plustpp == "No") {
                     if ($premiumrate == 0) {
                         $subpremium = $minimumamount + $additionalamount;
+
                     } else {
                         $subamount = ($suminsured * $premiumrate) / 100 + $additionalamount;
                         if ($subamount > $minimumamount) {
                             $subpremium = $subamount;
+
                         } else {
                             $subpremium = $minimumamount;
                         }
                     }
+
                 }
             }
 
@@ -260,6 +267,8 @@ class InsuranceController extends Controller
             $totalpremiumincludingtax = $taxamount + $pvalues;
             $premiumincludingtax = $taxamount + $pvalues;
 
+            $currenttransactionid =   $validated["currenttransactionid"];
+
             $commisionpaid = 0;
             $commisionrate = 0;
             $vunapoint = 0;
@@ -295,6 +304,7 @@ class InsuranceController extends Controller
 
                 // get details of selected addon product
                 $addon_reference_number = 1;
+                $currenttransactionid =   $validated["currenttransactionid"];
                 foreach($addons as $addons_data){
 
                     $addons_premium_including_tax = $addons_premium_excluding_tax = $addon_amounts = $addons_tax_amount = 0;
@@ -367,14 +377,12 @@ class InsuranceController extends Controller
             $totalpremiumexcludingtax = $totalpremiumexcludingtax + $get_total_addons_premium_excluding_tax;
 
             //get commission and vuna points for agent only
-            if(Auth::user()->role=="agent"){
+
                 $commisionpaid = 0;
                 $commisionrate = 0.125;
 
                 $commisionpaid = $totalpremiumexcludingtax * $commisionrate;
-                $vunapoint_c = $totalpremiumexcludingtax/100000;
-                $vunapoint = intval($vunapoint_c);
-            }
+
 
             //save data to session
 
@@ -676,13 +684,27 @@ class InsuranceController extends Controller
         }
 
 
-            if($updatetransaction>0) {
+
                 $summary = json_decode($this->summaryInsuranceInformation($request)->getContent(), true);
                 $response_data['addons'] = @$summary['code'] == 200 ? @$summary['data']['addons'] : [];
                 return response()->json($response_data);
-            } else {
-                return response()->json(['error'=>'error'], 400);
-            }
+
 
     }
+
+
+
+    public function summaryInsuranceInformation(Request $request)
+    {
+        $currenttransactionid =  $request->input("currenttransactionid");
+
+        $addons = DB::table('addons')->where('transaction_id', $currenttransactionid)->get();
+
+
+        return  response()->json([
+                    'addons' => $addons
+                ]);
+            }
+
+
 }

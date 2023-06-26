@@ -56,7 +56,7 @@ Route::resource('agent',AgentController::class);
 
 Route::post('add-product',[CompanyController::class,'addProduct']);
 
-Route::get('insurance-company',[CompanyController::class,'getCompanyByType']);
+Route::get('insurance-company/{id}',[CompanyController::class,'getCompanyByType']);
 });
 
 

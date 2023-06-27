@@ -61,6 +61,8 @@ Route::post('add-product',[CompanyController::class,'addProduct']);
 Route::get('insurance-company/{id}',[CompanyController::class,'getCompanyByType']);
 
 Route::post('create-notification',[ClaimsNotificationController::class,'create']);
+
+Route::get('get-notification/{id}',[ClaimsNotificationController::class,'show']);
 });
 
 

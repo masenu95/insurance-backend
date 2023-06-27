@@ -80,6 +80,13 @@ class ClaimsNotificationController extends Controller
         }
     }
 
+
+    public function show($id){
+        $data = ClaimNotification::find($id);
+
+        return response()->json($data, 200);
+    }
+
     public function create(Request $request){
 
 

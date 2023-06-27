@@ -82,53 +82,51 @@ class ClaimsNotificationController extends Controller
 
     public function create(Request $request){
 
-        $regions = DB::select('SELECT * FROM regions ORDER BY name ASC');
-        $datetime = $request->input('lossdate')." ".$request->input('losstime');
 
-        $claim_notification= new ClaimNotification;
+        $validated =$request->validate([
+           'id'=>'required',
+         'dully'=>'required',
+         'lossDate'=>'required',
+         'lossTime'=>'required',
+         'lossNature'=>'required',
+         'lossType'=>'required',
+         'lossLocation'=>'required',
 
-        $claim_notification->request_id = "CRN".time();
-        $claim_notification->transaction_id = $request->input('id');
-        $claim_notification->notification_number = "CNN".time();
-        $claim_notification->form_dully_filled = $request->input('dully');
-        $claim_notification->loss_date = $datetime;
-        $claim_notification->report_date = Carbon::now()->subMinutes(25);
-        $claim_notification->loss_nature = $request->input('lossnature');
-        $claim_notification->loss_type = $request->input('losstype');
-        $claim_notification->loss_location = $request->input('losslocation');
-        $claim_notification->officer_name = "".Auth::user()->first_name ." ".Auth::user()->last_name."";
-        $claim_notification->officer_title =Auth::user()->permission;
-        $claim_notification->agent_id =Auth::user()->user_id;
-        $claim_notification->user_id =Auth::user()->id;
-        $claim_notification->save();
+        ]);
 
-        $data = Transaction::where('id', $request->input('id'))->first();
-        $nature = $request->input('lossnature');
-        $names = "".Auth::user()->first_name ." ".Auth::user()->last_name."";
-        $loss_location = $request->input('losslocation');
-        $loss_type = $request->input('losstype');
+        $datetime = $validated['lossDate']." ".$validated['lossTime'];
+
+
+
+
+        $notification = ClaimNotification::create([
+            'request_id'=>"CRN".time(),
+            'transaction_id'=>$validated['id'],
+            'notification_number'=>"CNN".time(),
+            'report_date'=>Carbon::now()->subMinutes(25),
+            'form_dully_filled'=>$validated['dully'],
+            'loss_date'=>$datetime,
+            'loss_nature'=>$validated['lossNature'],
+            'loss_type'=>$validated['lossType'],
+            'loss_location'=>$validated['lossLocation'],
+            'officer_name'=>"".Auth::user()->first_name ." ".Auth::user()->last_name."",
+            'officer_title'=>'Agent',
+        ]);
+
+
+
 
        // sendNotificationEmailClaim($request->input('id'));
 
-        if(Auth::user()->role=="admin"){
-            if($claim_notification==true){
-                $id = $claim_notification->id;
-                return redirect()->route('admin.claim-notification', ["$id"]);
-            }else{
-                return view('admin.claim-notification', compact("covernote", "transactionid", "regions"));
-            }
-        }elseif(Auth::user()->role=="agent"){
-            if($claim_notification==true){
-                $id = $claim_notification->id;
-
-                    return $this->index($id);
+        if($notification){
+            return response()->json($notification, 200);
 
             }else{
 
                 return response()->json( 'Error', 500);
 
             }
-        }
+
 
 
     }
@@ -136,39 +134,10 @@ class ClaimsNotificationController extends Controller
     public function findTransaction(Request $request){
         $covernote = $request->input("covernoterefnumber");
 
-        $trans=Transaction::where("covernote_reference_number", "$covernote")->get();
-        $transactionid="";
+        $trans=Transaction::where("covernote_reference_number", "$covernote")->first();
+        return response()->json($trans, 200);
 
-        if(Auth::user()->role=="admin"){
-            if(count($trans) > 0){
 
-                foreach($trans as $data){
-                    $transactionid="$data->id";
-                }
-
-                return redirect()->route('admin.claim-notification', [0, "$covernote", "$transactionid"]);
-            }else {
-                 return redirect()->route('admin.claims');
-            }
-        }elseif(Auth::user()->role=="agent"){
-
-            if(count($trans) > 0){
-
-                foreach($trans as $data){
-                    $transactionid="$data->id";
-                }
-                return response()->json( [
-                        'covernote_reference_number' => $covernote,
-                        'transaction_id' => $transactionid
-                    ],200);
-
-            }else {
-
-                    return response()->json( 'This cover note reference number does not exist',500);
-
-            }
-
-        }
     }
 
     public function findClaim($id){

@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClaimsNotificationController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UploadController;
+use App\Models\ClaimNotification;
 use Faker\Provider\ar_EG\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +59,8 @@ Route::resource('agent',AgentController::class);
 Route::post('add-product',[CompanyController::class,'addProduct']);
 
 Route::get('insurance-company/{id}',[CompanyController::class,'getCompanyByType']);
+
+Route::post('create-notification',[ClaimsNotificationController::class,'create']);
 });
 
 

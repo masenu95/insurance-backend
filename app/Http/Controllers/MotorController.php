@@ -148,8 +148,8 @@ class MotorController extends Controller
                 'covernote_type' => $covernotetype,
                 'insurance_type_id'=>$request->insurance_type,
                 'insurance_product_id'=>$request->insurance_product,
-                'insurance_coverage_id'=>$request->insurance_coverage,
-                'insurance_company_id'=>$request->insurance_company,
+                'insurance_coverage_id'=>$validated['coverageid'],
+                'insurance_company_id'=>$request->insurance_company??1,
                 'agent_id'=>'1',
                 'request_id'=>'1'
 

@@ -106,7 +106,7 @@ $paymentGatewayUrl = $paymentData['payment_gateway_url'];
                 $mobile_payment->payment_status = "PENDING";
                 $mobile_payment->payment_token = $paymentToken;
                 $mobile_payment->reference = $reference;
-                $mobile_payment->qr = "$resp->qr";
+                $mobile_payment->qr = "data";
                 $mobile_payment->status = "PENDING";
 
                 $mobile_payment->save();//save payment

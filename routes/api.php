@@ -28,7 +28,9 @@ use Illuminate\Support\Facades\Route;
 // // Agent Only
 Route::middleware('auth:sanctum')->group(function () {
 
-   Route::post('/create-motor-detail',[InsuranceController::class,'createMotor']);
+
+
+   Route::post('/create-motor-detail-tpo',[MotorController::class,'tpo']);
 
    Route::resource('customer',CustomerController::class);
 

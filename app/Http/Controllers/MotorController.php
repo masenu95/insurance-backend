@@ -20,9 +20,62 @@ class MotorController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function tpo(Request $request)
     {
         //
+
+         $validated = $request->validate([
+            'make'=>'required',
+
+            'sitting_capacity'=>'required',
+            "owner_name"=>'required',
+            "owner_category"=>'required',
+            "insurance_type"=>'required',
+            "insurance_product"=>'required',
+            "coverageid"=>'required',
+            "requestid"=>'required',
+            "registration_number"=>'required',
+            "motor_usage"=>'required',
+
+        ]);
+
+     /*   if($request->input('insurance_coverage_product_type')=="IT"){
+            $registrationnumber = $request->input("chassisnumber");
+        }else{
+            $registrationnumber = $request->input("registrationnumber");
+        }*/
+
+        $callback = "http://ilink.co.tz/api/covernoteref/resp";
+        $covernotetype = 1;
+
+
+        $data = Transaction::create([
+                "make"=>$validated['make'],
+                "sitting_capacity"=>$validated['sitting_capacity'],
+                "year_of_manufacture"=>$validated['year_of_manufacture'],
+
+                "motor_usage"=>$validated['motor_usage'],
+                "owner_name"=>$validated['owner_name'],
+                "owner_category"=>$validated['owner_category'],
+                "owner_category"=>$validated['owner_category'],
+
+                "registration_number"=>$request->registration_number,
+                "chassis_number"=>$request->chassis_number,
+
+                "requestid"=>$validated['requestid'],
+                'user_id'=> Auth::user()->id,
+
+                'callback_url' => $callback,
+                'covernote_type' => $covernotetype,
+                'insurance_type_id'=>$request->insurance_type,
+                'insurance_product_id'=>$request->insurance_product,
+                'insurance_coverage_id'=>$validated['coverageid'],
+                'insurance_company_id'=>$request->insurance_company??1,
+                'agent_id'=>'1',
+
+
+        ]);
+        return response()->json($data, 200);
     }
 
     /**

@@ -85,16 +85,6 @@ class FleetController extends Controller
         $enddate = date_format($end_date, 'Y-m-d H:i:s');
         $startdate = date_format($add_minutes_start_date, 'Y-m-d H:i:s');
 
-        //forget session
-        $request->session()->forget("fleet_start_date");
-        $request->session()->forget("fleet_end_date");
-        $request->session()->forget("fleet_duration");
-        $request->session()->forget("fleet_sales_point");
-        $request->session()->forget("fleet_company_code");
-        $request->session()->forget("currencyid");
-        $request->session()->forget("currencytitle");
-        $request->session()->forget("currencyrate");
-        $request->session()->forget("currencystatus");
 
         $currency_status = 0;
         $currency_title = "";

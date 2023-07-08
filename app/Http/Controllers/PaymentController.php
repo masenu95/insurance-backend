@@ -43,7 +43,7 @@ class PaymentController extends Controller
                 'Timestamp' => "$timestamp"
             ])->post('https://apigw.selcommobile.com/v1/checkout/create-order-minimal', [
                 "order_id" => $transid,
-                "amount" => "$amount",
+                "amount" => $amount,
                 "vendor" => env('SELCOM_API_VENDOR'),
                 "currency" => "TZS",
                 "merchant_remarks" => "",
@@ -62,7 +62,7 @@ class PaymentController extends Controller
 
           //  $client = new Client($baseUrl, $api_key, $api_secret);
 
-           // $resp = json_decode($res);
+            $resp = json_decode($res);
 
             return $res;
 
@@ -72,13 +72,14 @@ class PaymentController extends Controller
 
                 $mobile_payment = new MobilePayment;
 
-                $mobile_payment->order_id = "$transid";
+                $mobile_payment->order_id = $transid;
                 $mobile_payment->currency = "TZS";
-                $mobile_payment->amount = "$amount";
+                $mobile_payment->amount = $amount;
                 $mobile_payment->paid_amount = "0.00";
-                $mobile_payment->remain_amount = "$amount";
+                $mobile_payment->remain_amount = $amount;
                 $mobile_payment->payment_status = "PENDING";
-                $mobile_payment->payment_token = "$resp->payment_token";
+                $mobile_payment->payment_token = $resp->data[0]['payment_token'];
+                $mobile_payment->reference = $resp->reference;
                 $mobile_payment->qr = "$resp->qr";
                 $mobile_payment->status = "PENDING";
 

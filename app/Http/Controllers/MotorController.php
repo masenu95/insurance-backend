@@ -70,7 +70,7 @@ class MotorController extends Controller
                 "registration_number"=>$request->registration_number,
                 "chassis_number"=>$request->chassis_number,
 
-                "requestid"=>$validated['requestid'],
+                "request_id"=>$validated['requestid'],
                 'user_id'=> Auth::user()->id,
 
                 'callback_url' => $callback,

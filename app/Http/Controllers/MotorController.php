@@ -61,7 +61,6 @@ class MotorController extends Controller
 
 
         $data = Transaction::create([
-                "make"=>$validated['make'],
                 "sitting_capacity"=>$validated['sitting_capacity'],
 
                 "motor_usage"=>$request->motor_usage,

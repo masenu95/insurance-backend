@@ -79,7 +79,7 @@ class PaymentController extends Controller
 
             $pu = json_decode($push);
 
-            return [$resp,$pu];
+
 
             if($resp->result == "SUCCESS"){
 

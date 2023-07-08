@@ -201,7 +201,7 @@ class MotorController extends Controller
                 "first_loss"=>$request->first_loss,
                 "image_reference"=>$request->imageReference,
 
-                "requestid"=>$validated['requestid'],
+                "request_id"=>$validated['requestid'],
                 'user_id'=> Auth::user()->id,
                 'addon_amount' => "0.00",
                 'addon_premium_rate' => "0.00",

@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Auth;
 
 class FleetController extends Controller
 {
+
+
+
     public function duration(){
         $currency = DB::table('currencies')->where('is_deleted', 0)->get();
         if(Auth::user()->role == "admin"){

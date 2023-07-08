@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InsuranceCoverage;
+use App\Models\InsuranceProduct;
 use App\Models\MotorGallery;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -12,9 +14,21 @@ class MotorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function motor(Request $request)
     {
         //
+
+        $product = InsuranceProduct::find($request->product);
+
+        if($request->coverage == 'Comprehensive'){
+
+        $coverage = InsuranceCoverage::where('insurance_product_id',$product->id)->where('coverage_type','Comprehensive')->get();
+
+
+
+        }else{
+
+        }
     }
 
     /**
@@ -25,16 +39,13 @@ class MotorController extends Controller
         //
 
          $validated = $request->validate([
-            'make'=>'required',
 
             'sitting_capacity'=>'required',
             "owner_name"=>'required',
-            "owner_category"=>'required',
             "insurance_type"=>'required',
             "insurance_product"=>'required',
             "coverageid"=>'required',
             "requestid"=>'required',
-            "registration_number"=>'required',
             "motor_usage"=>'required',
 
         ]);
@@ -52,12 +63,10 @@ class MotorController extends Controller
         $data = Transaction::create([
                 "make"=>$validated['make'],
                 "sitting_capacity"=>$validated['sitting_capacity'],
-                "year_of_manufacture"=>$validated['year_of_manufacture'],
 
-                "motor_usage"=>$validated['motor_usage'],
+                "motor_usage"=>$request->motor_usage,
                 "owner_name"=>$validated['owner_name'],
-                "owner_category"=>$validated['owner_category'],
-                "owner_category"=>$validated['owner_category'],
+                "owner_category"=>$request->owner_category,
 
                 "registration_number"=>$request->registration_number,
                 "chassis_number"=>$request->chassis_number,

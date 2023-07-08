@@ -60,6 +60,18 @@ class PaymentController extends Controller
             ]);
 
 
+            $push = Http::withOptions(['verify'=>false])->withHeaders([
+                'Authorization' => $authToken,
+                'digest' => "$digest",
+                'Digest-Method'=> 'HS256',
+                'Timestamp' => "$timestamp"
+            ])->post('https://apigw.selcommobile.com/v1/checkout/wallet-payment',[
+                "transid"=> $transid,
+                "order_id"=>$transid,
+                "msisdn"=>$request->phone,
+            ]);
+
+
           //  $client = new Client($baseUrl, $api_key, $api_secret);
 
             $resp = json_decode($res);

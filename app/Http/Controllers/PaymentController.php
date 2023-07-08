@@ -75,16 +75,24 @@ class PaymentController extends Controller
 
           //  $client = new Client($baseUrl, $api_key, $api_secret);
 
-            $resp = json_decode($res);
+            $resp = json_decode($res,true);
 
             $pu = json_decode($push);
 
 
-            return $resp;
+
+$reference = $resp['reference'];
+$resultCode =$resp['resultcode'];
+$result =$resp['result'];
+$message = $resp['message'];
+
+$paymentData = $resp['data'][0];
+$paymentToken = $paymentData['payment_token'];
+$paymentGatewayUrl = $paymentData['payment_gateway_url'];
 
 
 
-            if($resp->result == "SUCCESS"){
+            if($result == "SUCCESS"){
 
                 MobilePayment::where('order_id', $transid)->delete();
 
@@ -96,8 +104,8 @@ class PaymentController extends Controller
                 $mobile_payment->paid_amount = "0.00";
                 $mobile_payment->remain_amount = $amount;
                 $mobile_payment->payment_status = "PENDING";
-                $mobile_payment->payment_token = $resp->data[0]['payment_token'];
-                $mobile_payment->reference = $resp->reference;
+                $mobile_payment->payment_token = $paymentToken;
+                $mobile_payment->reference = $reference;
                 $mobile_payment->qr = "$resp->qr";
                 $mobile_payment->status = "PENDING";
 

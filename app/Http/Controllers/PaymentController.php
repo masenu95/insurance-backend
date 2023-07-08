@@ -70,6 +70,7 @@ class PaymentController extends Controller
                 "order_id"=>$transid,
                 "msisdn"=>$request->phone,
             ]);
+            return $push;
 
 
           //  $client = new Client($baseUrl, $api_key, $api_secret);

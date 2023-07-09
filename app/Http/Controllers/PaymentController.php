@@ -50,7 +50,7 @@ class PaymentController extends Controller
                 'Timestamp' => "$timestamp"
             ])->post('https://apigw.selcommobile.com/v1/checkout/create-order-minimal', [
                 "order_id" => $transid,
-                "amount" => $amount,
+                "amount" => env('APP_ENV') == "local"?1000:$amount,
                 "vendor" => env('SELCOM_API_VENDOR'),
                 "currency" => "TZS",
                 "merchant_remarks" => "",

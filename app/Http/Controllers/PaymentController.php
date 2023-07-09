@@ -10,9 +10,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
+
+    public function callback(Request $request){
+        Log::debug($request);
+    }
     public function mobile(Request $request){
 
 
@@ -36,6 +41,8 @@ class PaymentController extends Controller
             $data = "timestamp=$timestamp";
             $digest = base64_encode(hash_hmac('sha256', $data, $api_secret, true));
 
+            $callback = base64_encode("http://portal.bimakwik.com/api/callback");
+
             $res = Http::withOptions(['verify' => false])->withHeaders([
                 'Authorization' => $authToken,
                 'digest' => "$digest",
@@ -47,14 +54,10 @@ class PaymentController extends Controller
                 "vendor" => env('SELCOM_API_VENDOR'),
                 "currency" => "TZS",
                 "merchant_remarks" => "",
-                "buyer_name"=>'masenu',
-                "buyer_phone" => "255713497596",
                 "buyer_email"=> "john@example.com",
                 "buyer_name"=> "John Joh",
-                "buyer_phone"=> "255xxxxxxxxx",
-                "redirect_url"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
-                "cancel_url"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
-                "webhook"=>"aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
+                "buyer_phone"=> $request->phone,
+                "webhook"=>$callback,
 
                 "no_of_items"=>  3
             ]);

@@ -77,3 +77,4 @@ Route::post('register', [AuthController::class,'register']);
 
 Route::post('get-Token', [AuthController::class,'getToken']);
 
+Route::post('/callback',[PaymentController::class,'callback']);

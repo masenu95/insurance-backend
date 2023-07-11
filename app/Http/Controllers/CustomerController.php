@@ -33,7 +33,6 @@ class CustomerController extends Controller
     {
         $validated = $request->validate([
             'region_id' => 'required',
-            'district_id' => 'required',
             'full_name' => 'required',
             'dob' => 'required',
             'customer_type' => 'required',
@@ -41,14 +40,13 @@ class CustomerController extends Controller
             'id_type' => 'required',
             'gender' => 'required',
             'country_code' => 'required',
-            'street' => 'required',
             'phone' => 'required',
         ]);
 
         $data = Customer::create([
             'user_id'=>Auth::user()->id,
             'region_id'=>$validated['region_id'],
-            'district_id'=>$validated['district_id'],
+            'district_id'=>$request->district_id,
             'full_name'=>$validated['full_name'],
             'birth_date'=>$validated['dob'],
             'customer_type'=>$validated['customer_type'],
@@ -56,7 +54,7 @@ class CustomerController extends Controller
             'id_type'=>$validated['id_type'],
             'gender'=>$validated['gender'],
             'country_code'=>$validated['country_code'],
-            'street'=>$validated['street'],
+            'street'=>$request->street,
             'phone_number'=>$validated['phone'],
             'fax'=>$request->fax,
             'postal_address'=>$request->postal,

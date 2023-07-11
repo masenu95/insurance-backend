@@ -138,7 +138,6 @@ class FleetsController extends Controller
                 'is_fleet'=>'Y',
                 'fleet_id'=>$request->fleet_id,
                 'agent_id'=>'1',
-                'request_id'=>'1'
 
 
         ]);
@@ -234,6 +233,62 @@ class FleetsController extends Controller
         return response()->json($data, 200);
     }
 
+
+
+    public function tpo(Request $request)
+    {
+        //
+
+         $validated = $request->validate([
+
+            'sitting_capacity'=>'required',
+            "owner_name"=>'required',
+            "insurance_type"=>'required',
+            "insurance_product"=>'required',
+            "coverageid"=>'required',
+            "requestid"=>'required',
+            "motor_usage"=>'required',
+            "fleetId"=>'required'
+
+        ]);
+
+     /*   if($request->input('insurance_coverage_product_type')=="IT"){
+            $registrationnumber = $request->input("chassisnumber");
+        }else{
+            $registrationnumber = $request->input("registrationnumber");
+        }*/
+
+        $callback = "http://ilink.co.tz/api/covernoteref/resp";
+        $covernotetype = 1;
+
+
+        $data = Transaction::create([
+                "sitting_capacity"=>$validated['sitting_capacity'],
+
+                "motor_usage"=>$request->motor_usage,
+                "owner_name"=>$validated['owner_name'],
+                "owner_category"=>$request->owner_category,
+
+                "registration_number"=>$request->registration_number,
+                "chassis_number"=>$request->chassis_number,
+
+                "request_id"=>$validated['requestid'],
+                'user_id'=> Auth::user()->id,
+
+                'callback_url' => $callback,
+                'covernote_type' => $covernotetype,
+                'insurance_type_id'=>$request->insurance_type,
+                'insurance_product_id'=>$request->insurance_product,
+                'insurance_coverage_id'=>$validated['coverageid'],
+                'insurance_company_id'=>$request->insurance_company??1,
+                'agent_id'=>'1',
+                'is_fleet'=>'Y',
+                'fleet_id'=>$validated['fleetId'],
+
+
+        ]);
+        return response()->json($data, 200);
+    }
 
     public function getInsuranceValue(Request $request)
     {

@@ -166,7 +166,7 @@ class Helper
 
         // Convert the latitude and longitude to a location using any mapping service or library
 
-       // $location = $latitude . ', ' . $longitude;
+       $location = $latitude . ', ' . $longitude;
     }
 
     if (isset($metadata['DateTime'])) {

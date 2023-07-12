@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClaimsNotificationController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\FleetController;
+use App\Http\Controllers\FleetsController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\PaymentController;
@@ -32,6 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
    Route::post('/create-motor-detail-tpo',[MotorController::class,'tpo']);
 
+
+   Route::post('/create-motor-fleet-detail-tpo',[FleetsController::class,'tpo']);
+
    Route::resource('customer',CustomerController::class);
 
    Route::resource('company',CompanyController::class);
@@ -51,7 +56,7 @@ Route::post('upload-image',[UploadController::class,'uploadMotorImage']);
 Route::post('get-insurance-value',[InsuranceController::class,'getInsuranceValue']);
 
 
-
+Route::get('get-fleet/{id}',[FleetsController::class,'getFleetList']);
 Route::post('mobile-payment',[PaymentController::class,'mobile']);
 
 Route::resource('motor',MotorController::class);

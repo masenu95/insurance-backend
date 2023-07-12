@@ -931,4 +931,11 @@ class FleetsController extends Controller
 
 
     }
+
+    public function getFleetList($id){
+        $data = Transaction::where('fleet_id',$id)->get();
+
+        return response()->json($data, 200);
+    }
+
 }

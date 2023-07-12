@@ -61,6 +61,8 @@ Route::post('mobile-payment',[PaymentController::class,'mobile']);
 
 Route::resource('motor',MotorController::class);
 
+Route::get('get-fleet-value/{id}',[FleetsController::class,'sumPremium']);
+
 Route::resource('agent',AgentController::class);
 
 Route::post('add-product',[CompanyController::class,'addProduct']);

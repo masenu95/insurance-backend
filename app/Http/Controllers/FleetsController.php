@@ -938,4 +938,11 @@ class FleetsController extends Controller
         return response()->json($data, 200);
     }
 
+
+    public function sumPremium($id){
+        $data = Transaction::where('fleet_id',$id)->sum('premium_including_tax');
+
+        return response()->json($data, 200);
+    }
+
 }

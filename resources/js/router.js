@@ -17,8 +17,33 @@ const routes = [
 
      //authentication route
      {
-        path: '/admin-transactions',
-        component: require('./pages/admin/invoice/index.vue').default,
+        path: '/transactions',
+        component: require('./pages/admin/transaction/index.vue').default,
+        meta: {
+            title: 'Transaction|BimaKwik',
+        },
+        props: true,
+    },
+
+    {
+        path: '/success',
+        component: require('./pages/admin/success/index.vue').default,
+        meta: {
+            title: 'Success|BimaKwik',
+        },
+        props: true,
+    },
+    {
+        path: '/pending',
+        component: require('./pages/admin/pending/index.vue').default,
+        meta: {
+            title: 'Pending|BimaKwik',
+        },
+        props: true,
+    },
+    {
+        path: '/expiring',
+        component: require('./pages/admin/expiring/index.vue').default,
         meta: {
             title: 'Success|BimaKwik',
         },

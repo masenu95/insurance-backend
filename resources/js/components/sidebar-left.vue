@@ -8,10 +8,10 @@
                 <nav class="sidebar-nav" style="padding-top: 40px;">
                     <ul :class="gridmenu?'metismenu grid':'metismenu'">
                         <li :class="this.link=='home'?'active':''"><router-link to="../admin-home"><i class="fa fa-dashboard"></i><span>Dashboard</span></router-link></li>
-                        <li :class="this.link=='bank'?'active':''"><router-link to="../banks"><i class="fa fa-bank"></i><span>Pending</span></router-link></li>
-                        <li :class="this.link=='sector'?'active':''"><router-link to="../sectors"><i class="fa fa-industry"></i><span>Success</span></router-link></li>
-                        <li :class="this.link=='company'?'active':''"><router-link to="../companies"><i class="fa fa-building"></i><span>Expiring</span></router-link></li>
-                        <li :class="this.link=='transaction'?'active':''"><router-link to="../admin-transactions"><i class="fas fa-coins"></i><span>Transactions</span></router-link>
+                        <li :class="this.link=='bank'?'active':''"><router-link to="../pending"><i class="fa fa-bank"></i><span>Pending</span></router-link></li>
+                        <li :class="this.link=='sector'?'active':''"><router-link to="../success"><i class="fa fa-industry"></i><span>Success</span></router-link></li>
+                        <li :class="this.link=='company'?'active':''"><router-link to="../expiring"><i class="fa fa-building"></i><span>Expiring</span></router-link></li>
+                        <li :class="this.link=='transaction'?'active':''"><router-link to="../transactions"><i class="fas fa-coins"></i><span>Transactions</span></router-link>
                     </li>
 
                     </ul>

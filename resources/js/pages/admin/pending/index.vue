@@ -5,7 +5,7 @@
 <admin-header v-on:childToParent="menuclick"></admin-header>
     <!-- Start Rightbar setting panel -->
 <!-- Start Main leftbar navigation -->
-       <sidebar-left link="transaction"></sidebar-left>
+       <sidebar-left link="pending"></sidebar-left>
     <!-- Start project content area -->
     <!-- Start project content area -->
     <div class="page">
@@ -17,10 +17,9 @@
                 <div class="d-flex justify-content-between align-items-center ">
 
                     <div class="header-action">
-                        <h1 class="page-title">Transactions</h1>
+                        <h1 class="page-title">Pendings</h1>
                         <ol class="breadcrumb page-breadcrumb">
                             <li class="breadcrumb-item"><router-link to="#">BimaKwik</router-link></li>
-                            <li class="breadcrumb-item active" aria-current="page">Wallet</li>
                         </ol>
                     </div>
 
@@ -34,7 +33,7 @@
                         <div class="filter" style="padding:30px 15px">
                                 <div class="">
 
-                                    <h4><span>All Invoices</span>
+                                    <h4><span>AllPending</span>
                                         <article class="filter-range-date">
                                             <form @submit.prevent="filterData">
                                                 <section class="form-col3-left">
@@ -56,6 +55,26 @@
                             </div>
                         <div class="card">
                             <div class="table-responsive">
+                                <div class="row">
+                                        <div class="col-6">
+
+                                            <div class="input-group mb-3" style="width:300px">
+                                                <input type="text" class="form-control" placeholder="Search" v-model="search">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <ul class="header-dropdown" style="float:right">
+                                                <li>
+                                                    <download-excel class="btn btn-info excel-green" :data="invoices" :fields="label" title="export excel" worksheet="My Worksheet" name="Invoices.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
+                                                    </download-excel>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                   <v-data-table
                                 :headers="headers"
                                 :items="all"
@@ -123,7 +142,7 @@
 export default {
 
     data() {
-        return {search:"",search:"",
+        return {
             all:[],
             success:[],
             pending:[],
@@ -145,7 +164,7 @@ export default {
             display:false,
             filter:{
              reference:"",
-             transaction:"",
+             pending:"",
              mobile:null,
              service:null,
              channel:null,
@@ -194,6 +213,12 @@ export default {
                 },
 
                 {
+                    text: 'Expiring',
+                    value: 'covernote_end_date',
+                },
+
+
+                {
                     text: 'Payment',
                     value: 'payment_mode',
                 },
@@ -233,7 +258,7 @@ export default {
     async beforeMount(){
                 this.user = JSON.parse(localStorage.getItem('user'));
 
-        const res = await axios.get('api/transactions');
+        const res = await axios.get('api/pending');
              this.all = res.data;
 
         const staff = await axios.get('../../api/active-staff');
@@ -277,7 +302,7 @@ export default {
 
 
                   var result = await this.$swal({
-            title: 'Are you sure you want to approve '+item.transactionId,
+            title: 'Are you sure you want to approve '+item.pendingId,
             text: "You won't be able to revert this action!",
             icon: 'warning',
             showCancelButton: true,
@@ -286,9 +311,9 @@ export default {
             confirmButtonText: 'Yes, confirm !'
         });
         if (result.isConfirmed) {
-           const response = await axios.get('../api/transaction-approved/'+item.id+'/'+this.user.role +' approved');
+           const response = await axios.get('../api/pending-approved/'+item.id+'/'+this.user.role +' approved');
           if(response.status == 200){
-                  const response = await axios.get('api/transactions');
+                  const response = await axios.get('api/pendings');
             this.all =response.data;
 
              this.loading=false;

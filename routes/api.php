@@ -34,6 +34,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('transactions',[TransactionController::class,'index']);
 
 
+    Route::get('pending',[TransactionController::class,'pending']);
+
+
+    Route::get('success',[TransactionController::class,'success']);
+
+
+    Route::get('expiring',[TransactionController::class,'expiring']);
+
+
 
    Route::post('/create-motor-detail-tpo',[MotorController::class,'tpo']);
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\FleetsController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UploadController;
 use App\Models\ClaimNotification;
 use Faker\Provider\ar_EG\Company;
@@ -29,6 +30,8 @@ use Illuminate\Support\Facades\Route;
 
 // // Agent Only
 Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('transactions',[TransactionController::class,'index']);
 
 
 
@@ -85,5 +88,7 @@ Route::post('register', [AuthController::class,'register']);
 
 
 Route::post('get-Token', [AuthController::class,'getToken']);
+
+Route::post('login', [AuthController::class,'login']);
 
 Route::post('/callback',[PaymentController::class,'callback']);

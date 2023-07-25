@@ -51,4 +51,23 @@ class AuthController extends Controller
     }
 
     }
+
+
+    public function login(Request $request){
+
+        $user = User::Where('email', $request->username)->first();
+
+
+
+        if ($user && Hash::check($request->password, $user->password)) {
+
+        $token = $user->createToken('ILink')->plainTextToken;
+
+        return response()->json(['user'=>$user,'token'=>$token], 200);
+    }else{
+        return response()->json(['error'=>'invalid username and password combination'], 401, );
+    }
+
+
+    }
 }

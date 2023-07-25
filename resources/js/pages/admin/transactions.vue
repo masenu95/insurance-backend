@@ -31,141 +31,29 @@
             <div class="container-fluid">
                 <div class="tab-content">
                     <div class="tab-pane active">
-                        <div class="filter">
-                  <button @click="display=!display">
-                    <i class="fa fa-filter" aria-hidden="true"></i>Filter
-                  </button>
-                  <br />
-                  <div class="form-search" v-if="display">
-                    <form @submit.prevent="filterData">
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">Transaction Number</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.transaction"
-                            placeholder="Transaction Number"
-                          />
-                        </div>
+                        <div class="filter" style="padding:30px 15px">
+                                <div class="">
 
-                        <div class="col form-table">
-                          <span class="label">Reference</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.reference"
-                            placeholder="Reference Number"
-                          />
-                        </div>
-                      </div>
+                                    <h4><span>All Invoices</span>
+                                        <article class="filter-range-date">
+                                            <form @submit.prevent="filterData">
+                                                <section class="form-col3-left">
+                                                    <h5>From Date</h5>
+                                                    <input type="date" v-model="filter.min" placeholder="From date" class="form-control" required>
+                                                </section>
+                                                <input type="hidden" name="filter" value="filter">
+                                                <section class="form-col3-mid">
+                                                    <h5>To Date</h5>
+                                                    <input type="date" v-model="filter.max" placeholder="To date" class="form-control" required>
+                                                </section>
+                                                <section class="form-col3-right"><button type="submit" class="btn btn-secondary btn-sm"  style="margin-top: 25px !important; background-color:#1976d border:1px solid #f4f6f6; border-radius: 6px; color:#fff">Filter</button></section>
+                                            </form>
+                                        </article>
+                                    </h4>
 
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">Mobile</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.mobile"
-                            placeholder="Mobile"
-                          />
-                        </div>
+                                </div>
 
-                        <div class="col form-table">
-                          <span class="label">Bank</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.bank"
-                            placeholder="Bank"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">From</span>
-                          <input
-                            type="date"
-                            class="form-control input"
-                            v-model="filter.from"
-                          />
-                        </div>
-
-                        <div class="col form-table">
-                          <span class="label">To</span>
-                          <input
-                            type="date"
-                            class="form-control input"
-                            v-model="filter.to"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">Amount Start</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.amountStart"
-                          />
-                        </div>
-
-                        <div class="col form-table">
-                          <span class="label">Amount End</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.amountEnd"
-                          />
-                        </div>
-                      </div>
-
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">Service</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.service"
-                            placeholder="Service"
-                          />
-                        </div>
-
-                        <div class="col form-table">
-                          <span class="label">Channel</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.channel"
-                            placeholder="Channel"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <button
-                          type="submit"
-                          class="btn btn-primary btn-sm"
-                          v-if="!loading"
-                        >
-                          <i class="fas fa-sync-alt"></i>&nbsp;Refresh
-                        </button>
-                        <button
-                          class="btn btn-primary btn-sm"
-                          v-else
-                          type="button"
-                          disabled
-                        >
-                          <span
-                            class="spinner-grow spinner-grow-sm"
-                            role="status"
-                            aria-hidden="true"
-                          ></span>
-                          Loading...
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
+                            </div>
                         <div class="card">
                             <div class="table-responsive">
                                   <v-data-table

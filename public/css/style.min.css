@@ -18395,8 +18395,9 @@ svg {
 }
 
 .theme-cyan.gradient .btn-primary {
-    background-color: rgb(240, 220, 156) !important;
-    border-color: rgb(240, 220, 156) !important;
+    background-color: #2DAB54!important;
+    color: #fff;
+    border-color: #2DAB54!important;
     -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,.15),0 1px 3px 1px rgba(0,0,0,.15)!important;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.15),0 1px 3px 1px rgba(0,0,0,.15)!important;
     color:black !important;
@@ -23660,12 +23661,12 @@ border-color: red;
 
 .v-data-table-header{
     white-space: nowrap;
-    background-color:rgb(240, 220, 156) !important;
-    color: #0077b5 !important;
+    background-color:#2DAB54!important;
+    color: #fff !important;
 }
 
 .v-data-table-header th{
-    color: #000 !important;
+    color: #fff !important;
     font-weight: 500;
 
 }

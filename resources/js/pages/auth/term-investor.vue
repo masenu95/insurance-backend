@@ -842,14 +842,14 @@ ol li {
 }
 
 .stepper-item.completed .step-counter {
-    background-color: rgb(240, 220, 156) !important;
+    background-color: #2DAB54!important;
     color:#000 !important;
 }
 
 .stepper-item.completed::after {
     position: absolute;
     content: "";
-    border-bottom: 2px solid rgb(240, 220, 156) !important;
+    border-bottom: 2px solid #2DAB54!important;
     width: 100%;
     top: 20px;
     left: 50%;

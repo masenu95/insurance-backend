@@ -37,10 +37,10 @@
                                 <div class="card" style="background-color: #7895B2 !important;">
                                     <div class="card-body">
 
-                                        <router-link to="/staff-investor" class="my_sort_cut text-muted">
+                                        <router-link to="/staff-motor" class="my_sort_cut text-muted">
                                             <i style="color:#fff" class="fa fa-address-book"></i>
-                                            <span style="color:#fff">Investor</span>
-                                            <h5 style="color:#fff">{{investorCount|formatNumber}}</h5>
+                                            <span style="color:#fff">Motor</span>
+                                            <h5 style="color:#fff">{{motorCount|formatNumber}}</h5>
                                         </router-link>
                                     </div>
                                 </div>
@@ -49,10 +49,10 @@
                                 <div class="card" style="background-color: #A0E4CB;">
                                     <div class="card-body">
 
-                                        <router-link to="/staff-borrower" class="my_sort_cut text-muted">
+                                        <router-link to="/staff-life" class="my_sort_cut text-muted">
                                             <i style="color:#fff" class="fa fa-user-circle-o"></i>
-                                            <span style="color:#fff">Borrowers</span>
-                                            <h5 style="color:#fff">{{borrowerCount|formatNumber}}</h5>
+                                            <span style="color:#fff">Life</span>
+                                            <h5 style="color:#fff">{{lifeCount|formatNumber}}</h5>
                                         </router-link>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
 
                                         <router-link to="/staff-invoice" class="my_sort_cut text-muted">
                                             <i class="fa fa-folder"></i>
-                                            <span>Invoices</span>
+                                            <span>Marine</span>
                                             <h5>{{invoiceCount|formatNumber}}</h5>
                                         </router-link>
                                     </div>
@@ -73,10 +73,10 @@
                                 <div class="card" style="background-color: #E8DFCA !important;">
                                     <div class="card-body">
 
-                                        <router-link to="/staff-bids" class="my_sort_cut text-muted">
+                                        <router-link to="/staff-engineering" class="my_sort_cut text-muted">
                                             <i class="fa fa-gavel" aria-hidden="true"></i>
-                                            <span>Bids</span>
-                                            <h5>{{bidCount|formatNumber}}</h5>
+                                            <span>Engineering</span>
+                                            <h5>{{engineeringCount|formatNumber}}</h5>
                                         </router-link>
                                     </div>
                                 </div>
@@ -128,7 +128,7 @@
                                     <div class="col-xl-4 col-lg-4 col-md-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3 class="card-title">Bids</h3>
+                                                <h3 class="card-title">Engineering</h3>
                                             </div>
                                             <div class="card-body">
                                                 <Doughnut ref="skills_chart" :chart-data="doughnutData" :options="options">
@@ -137,7 +137,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row clearfix">
+                                <!--<div class="row clearfix">
                                     <div class="col-xl-12">
                                         <div class="card">
                                             <div class="card-header">
@@ -196,7 +196,7 @@
                                                     </div>
                                                     <div class="col-xl-3 col-md-6 mb-2">
                                                         <div class="clearfix">
-                                                            <div class="float-left"><strong>Borrowers</strong></div>
+                                                            <div class="float-left"><strong>Life</strong></div>
                                                             <div class="float-right"><small class="text-muted">87%</small></div>
                                                         </div>
                                                         <div class="progress progress-xs">
@@ -206,7 +206,7 @@
                                                     </div>
                                                     <div class="col-xl-3 col-md-6 mb-2">
                                                         <div class="clearfix">
-                                                            <div class="float-left"><strong>Investor</strong></div>
+                                                            <div class="float-left"><strong>Motor</strong></div>
                                                             <div class="float-right"><small class="text-muted">42%</small></div>
                                                         </div>
                                                         <div class="progress progress-xs">
@@ -219,7 +219,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--<div class="row clearfix">
+                                <div class="row clearfix">
                                         <div class="col-xl-12 col-lg-12 col-md-12">
                                             <div class="card">
                                                 <div class="card-header">
@@ -253,7 +253,7 @@
                                     <div class="col-xl-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3 class="card-title">Last Ten Invoice</h3>
+                                                <h3 class="card-title">Last Ten Transactions</h3>
 
                                             </div>
                                             <div class="card-body">
@@ -265,9 +265,9 @@
                                             </div>
                                             <div class="card-footer">
                                                 <div class="table-responsive">
-                                                    <v-data-table :headers="headers" :items="invoices" :items-per-page="10" :search="search" class="elevation-1">
+                                                    <v-data-table :headers="headers" :items="marine" :items-per-page="10" :search="search" class="elevation-1">
                                                         <template #item.index="{ item }">
-                                                            {{ invoices.indexOf(item) + 1 }}
+                                                            {{ marine.indexOf(item) + 1 }}
                                                         </template>
 
                                                         <template v-slot:item.controls="props">
@@ -306,7 +306,7 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="card-title">Borrower</h3>
+                                            <h3 class="card-title">Life</h3>
                                             <div class="card-options">
                                                 <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
                                                 <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
@@ -461,12 +461,12 @@
                 mobile: false,
                 invoiceCount: 0,
                 staffCount: 0,
-                bidCount: 0,
-                borrowerCount: 0,
+                engineeringCount: 0,
+                lifeCount: 0,
                 transCount: 0,
-                investorCount: 0,
+                motorCount: 0,
                 limit: 0,
-                invoices: [],
+                marine: [],
                 purpleLineChart: {
                     extraOptions: chartConfigs.purpleChartOptions,
                     chartData: {
@@ -501,48 +501,57 @@
                     }]
                 },
                 headers: [{
-                        value: 'index',
-                        text: '#',
-                        sortable: false,
-                    },
-                    {
-                        text: 'Invoice number',
-                        value: 'invoice_number',
-                    },
-                    {
-                        text: 'Owning company',
-                        value: 'company.name',
-                    },
-                    {
-                        text: 'Borrower',
-                        value: 'borrower.user.name',
-                    },
-                    {
-                        text: 'invoice Date',
-                        value: 'invoice_date',
-                    },
-                    {
-                        text: 'Maturity Date',
-                        value: 'maturity_date',
-                    },
-                    {
-                        text: 'Amount',
-                        value: 'amou',
-                    },
-                    {
-                        text: "Invoice Status",
-                        value: "inStatus"
-                    },
-                    {
-                        text: 'Created At',
-                        value: 'join'
-                    },
-                    {
-                        text: 'Status',
-                        value: "stat"
-                    },
+                    value: 'index',
+                    text: '#',
+                    sortable: false,
+                },
+                {
+                    text: 'customer',
+                    value: 'customer.full_name',
+                },
+                {
+                    text: 'Type',
+                    value: 'insurance_type.name',
+                },
 
-                ],
+                {
+                    text: 'Region',
+                    value: 'customer.region.name',
+                },
+
+                {
+                    text: 'Payment',
+                    value: 'payment_mode',
+                },
+
+
+                {
+                    text: 'Vehicle',
+                    value: 'registration_number',
+                },
+
+                {
+                    text: 'Premium',
+                    value: 'premium',
+                },
+
+                {
+                    text: 'Status',
+                    value: 'stat',
+                },
+
+
+                {
+                    text: 'Created At',
+                    value: 'join'
+                },
+
+                {
+                    text: '',
+                    value: 'action'
+                },
+
+            ],
 
             };
         },
@@ -554,13 +563,13 @@
 
             this.invoiceCount = stat.data.invoice;
             this.transCount = stat.data.trans;
-            this.bidCount = stat.data.bid;
-            this.borrowerCount = stat.data.borrower;
+            this.engineeringCount = stat.data.engineering;
+            this.lifeCount = stat.data.life;
             this.staffCount = stat.data.staff;
-            this.investorCount = stat.data.investor;
+            this.motorCount = stat.data.motor;
 
-            const invoices = await axios.get('/api/admin-latest-invoice');
-            this.invoices = invoices.data;
+            const marine = await axios.get('/api/admin-latest-invoice');
+            this.marine = marine.data;
 
         },
 

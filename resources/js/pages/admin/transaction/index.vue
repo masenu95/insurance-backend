@@ -5,7 +5,7 @@
 <admin-header v-on:childToParent="menuclick"></admin-header>
     <!-- Start Rightbar setting panel -->
 <!-- Start Main leftbar navigation -->
-       <staff-sidebar-left link="invoice"></staff-sidebar-left>
+       <sidebar-left link="transaction"></sidebar-left>
     <!-- Start project content area -->
     <!-- Start project content area -->
     <div class="page">
@@ -23,167 +23,59 @@
                             <li class="breadcrumb-item active" aria-current="page">Wallet</li>
                         </ol>
                     </div>
-                    <ul class="nav nav-tabs page-header-tab" >
-                         <li class="nav-item"><a class="nav-link " :class="active=='all'?'active':''"   @click.prevent="active='all'">ALL</a></li>
-                        <li class="nav-item"><a class="nav-link" :class="active=='success'?'active':''"  @click.prevent="completed">Success</a></li>
-                        <li class="nav-item"><a class="nav-link" :class="active=='pending'?'active':''" @click.prevent="incomplete" >Pending</a></li>
 
-                    </ul>
                 </div>
             </div>
         </div>
         <div class="section-body mt-4">
             <div class="container-fluid">
                 <div class="tab-content">
-                    <div class="tab-pane " :class="active=='all'?'active':''">
-                        <div class="filter">
-                  <button @click="display=!display">
-                    <i class="fa fa-filter" aria-hidden="true"></i>Filter
-                  </button>
-                  <br />
-                  <div class="form-search" v-if="display">
-                    <form @submit.prevent="filterData">
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">Transaction Number</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.transaction"
-                            placeholder="Transaction Number"
-                          />
-                        </div>
+                    <div class="tab-pane active">
+                        <div class="filter" style="padding:30px 15px">
+                                <div class="">
 
-                        <div class="col form-table">
-                          <span class="label">Reference</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.reference"
-                            placeholder="Reference Number"
-                          />
-                        </div>
-                      </div>
+                                    <h4><span>All Invoices</span>
+                                        <article class="filter-range-date">
+                                            <form @submit.prevent="filterData">
+                                                <section class="form-col3-left">
+                                                    <h5>From Date</h5>
+                                                    <input type="date" v-model="filter.min" placeholder="From date" class="form-control" required>
+                                                </section>
+                                                <input type="hidden" name="filter" value="filter">
+                                                <section class="form-col3-mid">
+                                                    <h5>To Date</h5>
+                                                    <input type="date" v-model="filter.max" placeholder="To date" class="form-control" required>
+                                                </section>
+                                                <section class="form-col3-right"><button type="submit" class="btn btn-secondary btn-sm"  style="margin-top: 25px !important; background-color:#1976d border:1px solid #f4f6f6; border-radius: 6px; color:#fff">Filter</button></section>
+                                            </form>
+                                        </article>
+                                    </h4>
 
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">Mobile</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.mobile"
-                            placeholder="Mobile"
-                          />
-                        </div>
+                                </div>
 
-                        <div class="col form-table">
-                          <span class="label">Bank</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.bank"
-                            placeholder="Bank"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">From</span>
-                          <input
-                            type="date"
-                            class="form-control input"
-                            v-model="filter.from"
-                          />
-                        </div>
-
-                        <div class="col form-table">
-                          <span class="label">To</span>
-                          <input
-                            type="date"
-                            class="form-control input"
-                            v-model="filter.to"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">Amount Start</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.amountStart"
-                          />
-                        </div>
-
-                        <div class="col form-table">
-                          <span class="label">Amount End</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.amountEnd"
-                          />
-                        </div>
-                      </div>
-
-                      <div class="form-row">
-                        <div class="col form-table">
-                          <span class="label">Service</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.service"
-                            placeholder="Service"
-                          />
-                        </div>
-
-                        <div class="col form-table">
-                          <span class="label">Channel</span>
-                          <input
-                            type="text"
-                            class="form-control input"
-                            v-model="filter.channel"
-                            placeholder="Channel"
-                          />
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <button
-                          type="submit"
-                          class="btn btn-primary btn-sm"
-                          v-if="!loading"
-                        >
-                          <i class="fas fa-sync-alt"></i>&nbsp;Refresh
-                        </button>
-                        <button
-                          class="btn btn-primary btn-sm"
-                          v-else
-                          type="button"
-                          disabled
-                        >
-                          <span
-                            class="spinner-grow spinner-grow-sm"
-                            role="status"
-                            aria-hidden="true"
-                          ></span>
-                          Loading...
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
+                            </div>
                         <div class="card">
-                            <ul class="header-dropdown">
-                                    <li>
-                                     <download-excel
-                                          class="btn btn-info"
-                                          :data="bids"
-                                          :fields="label"
-                                          worksheet="My Worksheet"
-                                          name="Transactions.xls"
-                                          style="color:#fff"
-                                      ><i class="fas fa-cloud-download-alt" style="color:#fff"></i> &nbsp;Download Excel
-                                      </download-excel></li></ul>
                             <div class="table-responsive">
+                                <div class="row">
+                                        <div class="col-6">
+
+                                            <div class="input-group mb-3" style="width:300px">
+                                                <input type="text" class="form-control" placeholder="Search" v-model="search">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <ul class="header-dropdown" style="float:right">
+                                                <li>
+                                                    <download-excel class="btn btn-info excel-green" :data="invoices" :fields="label" title="export excel" worksheet="My Worksheet" name="Invoices.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
+                                                    </download-excel>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                   <v-data-table
                                 :headers="headers"
                                 :items="all"
@@ -199,13 +91,15 @@
 
 
 
-                                     <template v-slot:item.amou="props">
-                                        {{props.item.amount | formatNumber}}
+                                     <template v-slot:item.premium="props">
+                                        {{props.item.total_premium_including_tax | formatNumber}}
                                     </template>
 
                                      <template v-slot:item.join="props">
                                        {{props.item.created_at | formatDate}}
                                     </template>
+
+
                                 <template v-slot:item.stat="props">
 
                                    <span class="badge alert-success" v-if="props.item.status=='ACTIVE'">{{props.item.status}}</span>
@@ -215,7 +109,7 @@
                                 </template>
                                        <template v-slot:item.actn="props">
 
-                                   <span class="badge alert-success" v-if="props.item.status !='ACTIVE'&&props.item.stage == process.stage" title="Approve"><button @click.prevent="approve(props.item)"><i class="fa-solid fa-check-double"></i></button></span>
+                                   <span class="badge alert-success" v-if=" props.item.status.toUpperCase() != 'ACTIVE'" title="Approve"><button @click.prevent="approve(props.item)"><i class="fa-solid fa-check-double"></i></button></span>
 
 
 
@@ -224,92 +118,7 @@
                             </div>
                         </div>
                     </div>
-                      <div class="tab-pane " :class="active=='success'?'active':''">
-                        <div class="card">
-                            <div class="table-responsive">
-                                  <v-data-table
-                                :headers="headers"
-                                :items="success"
-                                :items-per-page="10"
-                                 :search="search"
 
-
-                                class="elevation-1">
-                                <template #item.index="{ item }">
-                                    {{ success.indexOf(item) + 1 }}
-                                </template>
-
-
-
-
-                                     <template v-slot:item.amou="props">
-                                        {{props.item.amount | formatNumber}}
-                                    </template>
-
-                                     <template v-slot:item.join="props">
-                                       {{props.item.created_at | formatDate}}
-                                    </template>
-                                <template v-slot:item.stat="props">
-
-                                   <span class="badge alert-success" v-if="props.item.status=='ACTIVE'">{{props.item.status}}</span>
-                                   <span class="badge alert-danger" v-else>{{props.item.status}}</span>
-
-
-                                </template>
-                                       <template v-slot:item.actn="props">
-
-                                   <span class="badge alert-success" v-if="props.item.action=='1'">Top Up</span>
-                                   <span class="badge alert-danger" v-else>Withdraw</span>
-
-
-                                </template>
-                            </v-data-table>
-                            </div>
-                        </div>
-                    </div>
-                      <div class="tab-pane " :class="active=='pending'?'active':''">
-                        <div class="card">
-                            <div class="table-responsive">
-                                  <v-data-table
-                                :headers="headers"
-                                :items="pending"
-                                :items-per-page="10"
-                                 :search="search"
-
-
-                                class="elevation-1">
-                                <template #item.index="{ item }">
-                                    {{ pending.indexOf(item) + 1 }}
-                                </template>
-
-
-
-
-                                     <template v-slot:item.amou="props">
-                                        {{props.item.amount | formatNumber}}
-                                    </template>
-
-                                     <template v-slot:item.join="props">
-                                       {{props.item.created_at | formatDate}}
-                                    </template>
-                                <template v-slot:item.stat="props">
-
-                                   <span class="badge alert-success" v-if="props.item.status=='ACTIVE'">{{props.item.status}}</span>
-                                   <span class="badge alert-danger" v-else>{{props.item.status}}</span>
-
-
-                                </template>
-                                       <template v-slot:item.actn="props">
-
-                                   <span class="badge alert-success" v-if="props.item.action=='1'">Top Up</span>
-                                   <span class="badge alert-danger" v-else>Withdraw</span>
-
-
-                                </template>
-                            </v-data-table>
-                            </div>
-                        </div>
-                    </div>
 
 
 
@@ -334,7 +143,7 @@
 export default {
 
     data() {
-        return {search:"",search:"",
+        return {
             all:[],
             success:[],
             pending:[],
@@ -346,11 +155,13 @@ export default {
             bidsAmount:0,
             progress:0,
             current:[],
-
             previusStage:null,
             nextStage:null,
-            display:false,
             staff:[],
+            flow:[],
+              process:[],
+            mobile:false,
+            processes:[],
             display:false,
             filter:{
              reference:"",
@@ -365,10 +176,6 @@ export default {
              amountEnd:""
             },
 
-            flow:[],
-              process:[],
-            mobile:false,
-            processes:[],
             current:[],
             progress:0,
             previusStage:null,
@@ -387,87 +194,58 @@ export default {
             errors:[],
             errorsWithdraw:[],
             errorsEdit:[],
-            headers: [
-                    {
-                        value: 'index',
-                        text: '#',
-                         sortable: false,
-                    },
-                          {
-                        text: 'Transaction Id',
-                        value: 'transactionId',
-                    },
+            headers: [{
+                    value: 'index',
+                    text: '#',
+                    sortable: false,
+                },
+                {
+                    text: 'customer',
+                    value: 'customer.full_name',
+                },
+                {
+                    text: 'Type',
+                    value: 'insurance_type.name',
+                },
 
-                    {
-                        text: 'User',
-                        value: 'user.name',
-                    },
-                    {
-                        text: 'Borrower',
-                        value: 'borrower_name',
-                    },
-                    /*{
-                        text: 'Investor',
-                        value: 'investor_name',
-                    },*/
-                    {
-                        text: 'Invoice number',
-                        value: 'invoice_number',
-                    },
-                    {
-                        text: 'Discounting amount',
-                        value: 'discounting_amount',
-                    },
-                    {
-                        text: 'Bid number',
-                        value: 'bid_no',
-                    },
-                      {
-                        text: 'Mobile',
-                        value: 'mobile',
-                    },
-                        {
-                        text: 'Bank',
-                        value: 'bank',
-                    },
-                    {
-                        text: 'Account number',
-                        value: 'account',
-                    },
-                        {
-                        text: 'Reference',
-                        value: 'reference',
-                    },
-                         {
-                        text: 'Service',
-                        value: 'service',
-                    },
-                           {
-                        text: 'Channel',
-                        value: 'channel',
-                    },
-                        {
-                        text: 'Status',
-                        value: 'stat',
-                    },
-                    {
-                        text: 'Amount',
-                        value: 'amou',
-                    },
-                    { text: 'Created At', value: 'join' },
-                    { text: 'Action', value: 'actn',},
-                ],
-                label:{
-                      "Transaction Id":"transactionId",
-                      "Mobile":"mobile",
-                      "Bank":"bank",
-                      "Name":"user.name",
-                      "Reference":"reference",
-                      "Service":"service",
+                {
+                    text: 'Region',
+                    value: 'customer.region.name',
+                },
 
-                      "Amount":"amount",
-                      "Channel":"channel",
-                  },
+                {
+                    text: 'Payment',
+                    value: 'payment_mode',
+                },
+
+
+                {
+                    text: 'Vehicle',
+                    value: 'registration_number',
+                },
+
+                {
+                    text: 'Premium',
+                    value: 'premium',
+                },
+
+                {
+                    text: 'Status',
+                    value: 'stat',
+                },
+
+
+                {
+                    text: 'Created At',
+                    value: 'join'
+                },
+
+                {
+                    text: '',
+                    value: 'action'
+                },
+
+            ],
 
         };
     },
@@ -500,8 +278,7 @@ export default {
        menuclick (value) {
                     this.mobile = value
                 },
-
-                async filterData(){
+    async filterData(){
             this.loading=true;
             const response = await axios.post('api/user-trans-filter',this.filter);
 
@@ -529,7 +306,7 @@ export default {
             confirmButtonText: 'Yes, confirm !'
         });
         if (result.isConfirmed) {
-           const response = await axios.get('../api/transaction-approved/'+item.id+'/'+this.staff.role.name+' approved');
+           const response = await axios.get('../api/transaction-approved/'+item.id+'/'+this.user.role +' approved');
           if(response.status == 200){
                   const response = await axios.get('api/transactions');
             this.all =response.data;

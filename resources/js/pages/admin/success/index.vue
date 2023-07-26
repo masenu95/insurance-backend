@@ -5,7 +5,7 @@
 <admin-header v-on:childToParent="menuclick"></admin-header>
     <!-- Start Rightbar setting panel -->
 <!-- Start Main leftbar navigation -->
-       <sidebar-left link="transaction"></sidebar-left>
+       <sidebar-left link="success"></sidebar-left>
     <!-- Start project content area -->
     <!-- Start project content area -->
     <div class="page">
@@ -252,20 +252,13 @@ export default {
     async beforeMount(){
                 this.user = JSON.parse(localStorage.getItem('user'));
 
-        const res = await axios.get('api/transactions');
+        const res = await axios.get('api/success');
              this.all = res.data;
 
-        const staff = await axios.get('../../api/active-staff');
-        const result = await axios.get('api/flow-process/'+9+'/'+staff.data.role_id);
-
-        const resp = await axios.get('api/flow-by-process/'+9);
-        this.processes = resp.data;
 
 
 
-        this.process = result.data;
 
-        this.staff = staff.data;
 
     },
 
@@ -289,76 +282,9 @@ export default {
 
 
 
-        async approve(item){
-
-
-             try{
-
-
-                  var result = await this.$swal({
-            title: 'Are you sure you want to approve '+item.transactionId,
-            text: "You won't be able to revert this action!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#000',
-            confirmButtonText: 'Yes, confirm !'
-        });
-        if (result.isConfirmed) {
-           const response = await axios.get('../api/transaction-approved/'+item.id+'/'+this.user.role +' approved');
-          if(response.status == 200){
-                  const response = await axios.get('api/transactions');
-            this.all =response.data;
-
-             this.loading=false;
-
-
-                this.$swal(
-                'Confirmed Refresh browser!',
-                response.data,
-                'success'
-            )
-          }
-
-        }
 
 
 
-
-
-            }catch(e){
-                    console.log(e);
-                    this.$toast.open({
-                            message: 'Internal server error',
-                            type: 'error',
-                            duration: 5000,
-                            position: 'bottom-right'
-                            // all of other options may go here
-                        });
-
-                 this.loading=false;
-            }
-
-        },
-
-           completed(){
-             this.load = true;
-            this.active = "success";
-
-            const result = this.all.filter( ({ status }) => status === 'ACTIVE' );
-            this.success = result;
-
-            this.load = false;
-        },
-    incomplete(){
-             this.load = true;
-            this.active = "pending";
-
-            const result = this.all.filter( ({ status }) => status === 'PENDING' );
-            this.pending = result;
-
-            this.load = false;
-        },
 
 
     },

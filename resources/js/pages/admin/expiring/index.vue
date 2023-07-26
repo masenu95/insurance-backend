@@ -5,7 +5,7 @@
 <admin-header v-on:childToParent="menuclick"></admin-header>
     <!-- Start Rightbar setting panel -->
 <!-- Start Main leftbar navigation -->
-       <sidebar-left link="transaction"></sidebar-left>
+       <sidebar-left link="expiring"></sidebar-left>
     <!-- Start project content area -->
     <!-- Start project content area -->
     <div class="page">
@@ -17,7 +17,7 @@
                 <div class="d-flex justify-content-between align-items-center ">
 
                     <div class="header-action">
-                        <h1 class="page-title">Transactions</h1>
+                        <h1 class="page-title">Expiring</h1>
                         <ol class="breadcrumb page-breadcrumb">
                             <li class="breadcrumb-item"><router-link to="#">BimaKwik</router-link></li>
                         </ol>
@@ -33,7 +33,7 @@
                         <div class="filter" style="padding:30px 15px">
                                 <div class="">
 
-                                    <h4><span>AllTransaction</span>
+                                    <h4><span>All Expiring</span>
                                         <article class="filter-range-date">
                                             <form @submit.prevent="filterData">
                                                 <section class="form-col3-left">
@@ -252,7 +252,7 @@ export default {
     async beforeMount(){
                 this.user = JSON.parse(localStorage.getItem('user'));
 
-        const res = await axios.get('api/transactions');
+        const res = await axios.get('../api/expiring');
              this.all = res.data;
 
         const staff = await axios.get('../../api/active-staff');

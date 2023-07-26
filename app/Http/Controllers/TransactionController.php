@@ -46,6 +46,26 @@ class TransactionController extends Controller
     }
 
 
+
+    public function expiring(Request $request){
+
+        $currentDate = Carbon::now();
+$fiveDaysFromNow = $currentDate->copy()->addDays(5);
+$nearExpiryPolicies = Transaction::where('covernote_end_date', '>', $currentDate)
+->where('covernote_end_date', '<=', $fiveDaysFromNow)
+->get();
+
+// Filter expired policies
+$expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
+->get();
+
+
+
+                return response()->json($nearExpiryPolicies);
+
+    }
+
+
     public function cancelled(Request $request){
         if($request->input('filter')=='filter'){
 

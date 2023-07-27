@@ -108,7 +108,7 @@
                                 </template>
                                        <template v-slot:item.actn="props">
 
-                                   <span class="badge alert-success" v-if=" props.item.status.toUpperCase() != 'ACTIVE'" title="Approve"><button @click.prevent="approve(props.item)"><i class="fa-solid fa-check-double"></i></button></span>
+                                   <span class="badge alert-info"  title="View"><router-link :to="'../../transaction/'+props.item.id"><i class="fa-solid fa-expand"></i></router-link></span>
 
 
 
@@ -241,7 +241,7 @@ export default {
 
                 {
                     text: '',
-                    value: 'action'
+                    value: 'actn'
                 },
 
             ],

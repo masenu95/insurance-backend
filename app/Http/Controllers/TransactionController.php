@@ -411,7 +411,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                       ->join('branches', 'branches.id', '=', 'users.user_id')
                       ->where('users.role', 'admin')
                       ->where('transactions.status', '=','Success')
-                      ->where('branches.id', $branchid)
+
                       ->where('transactions.is_deleted',0)
                       ->whereDate('transactions.created_at','>=', $request->input('min'))
                       ->whereDate('transactions.created_at','<=', $request->input('max'))
@@ -443,7 +443,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                       ->join('branches', 'branches.id', '=', 'users.user_id')
                       ->where('users.role', 'admin')
                       ->where('transactions.status', '=','Success')
-                      ->where('branches.id', $branchid)
+
                       ->where('transactions.is_deleted',0)
                       ->whereDate('transactions.created_at','>=', $request->input('min'))
                       ->whereDate('transactions.created_at','<=', $request->input('max'))
@@ -651,7 +651,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                       ->join('branches', 'branches.id', '=', 'users.user_id')
                       ->where('users.role', 'admin')
                       ->where('transactions.status', '=','Success')
-                      ->where('branches.id', $branchid)
+
                       ->where('transactions.is_deleted',0)
                       ->whereDate('transactions.created_at', Carbon::now()->today())
                       ->where('transactions.fleet_status_entry', '!=','FLEET')
@@ -685,7 +685,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                       ->join('branches', 'branches.id', '=', 'users.user_id')
                       ->where('users.role', 'admin')
                       ->where('transactions.status', '=','Success')
-                      ->where('branches.id', $branchid)
+
                       ->where('transactions.is_deleted',0)
                       ->whereDate('transactions.created_at', Carbon::now()->today())
                       ->where('transactions.fleet_status_entry', '=','FLEET')
@@ -851,7 +851,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                   ->join('users', 'users.id', '=', 'transactions.user_id')
                   ->join('branches', 'branches.id', '=', 'users.user_id')
                   ->where('users.role', 'admin')
-                  ->where('branches.id', $branchid)
+
                   ->whereDate('transactions.created_at', Carbon::now()->today())
                   ->where('transactions.is_deleted',0)
                   ->select('transactions.*', 'customers.full_name AS customername', 'regions.name AS region', 'insurance_types.name as typenames', 'branches.name AS baname')
@@ -927,7 +927,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                   ->join('branches', 'branches.id', '=', 'users.user_id')
                   ->where('users.role', 'admin')
                   ->where('transactions.status', '=','Success')
-                  ->where('branches.id', $branchid)
+
                   ->whereDate('transactions.created_at', Carbon::now()->today())
                   ->where('transactions.is_deleted',0)
                   ->select('transactions.*', 'customers.full_name AS customername', 'regions.name AS region', 'insurance_types.name as typenames', 'branches.name AS baname')
@@ -944,7 +944,6 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                   ->where('users.role', 'agent')
                   ->where('transactions.status', '=','Success')
                   ->whereDate('transactions.created_at', Carbon::now()->today())
-                  ->where('users.branch_id', $branchid)
                   ->where('transactions.is_deleted',0)
                   ->select('transactions.*', 'customers.full_name AS customername', 'regions.name AS region', 'insurance_types.name as typenames', 'agents.name AS baname')
                   ->orderBy('transactions.id', 'DESC')
@@ -957,12 +956,12 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
         }
     }
 
-    public function transactionInfo($tranid){
+    public function transactionInfo($id){
 
-        $transactions = DB::select("SELECT T.id, T.request_id AS requestid, T.company_code, T.system_code, T.callback_url, T.insurer_company_code, T.tran_company_code, T.covernote_type, T.covernote_number, T.prev_covernote_reference_number, T.sales_point_code, T.covernote_start_date, T.covernote_end_date, date_format(T.covernote_start_date,'%b %d, %y') AS startdate, date_format(T.covernote_end_date,'%b %d, %y') AS enddate, T.covernote_desc, T.operative_clause, T.covering_details, T.payment_mode AS paymentmodes, T.currency_code, T.exchange_rate, T.total_premium_excluding_tax, T.total_premium_including_tax AS totalpremiums, T.commission_paid, T.commission_rate, T.officer_name, T.officer_title, T.endorsement_type, T.endorsement_reason, T.sum_insured AS suminsured, T.sum_insured_equivalent, T.premium_rate, T.premium_before_discount, T.premium_discount, T.discount_type, T.premium_after_discount, T.premium_excluding_tax_equivalent, T.premium_including_tax, T.tax_code, T.tax_rate, T.tax_amount, T.subject_matter_reference, T.subject_matter_desc, T.addon_reference, T.addon_desc, T.addon_amount, T.addon_premium_rate, T.premium_excluding_tax, T.is_feet, T.fleet_id, T.fleet_size, T.comprehensive_insured, T.fleet_entry, T.motor_category, T.registration_number, T.chassis_number, T.make, T.model, T.model_number, T.body_type, T.color, T.engine_number, T.engine_capacity, T.fuel_used, T.number_of_axles, T.axle_distance, T.sitting_capacity, T.year_of_manufacture, T.tare_weight, T.gross_weight, T.motor_usage, T.owner_name, T.owner_category, T.owner_address, T.covernote_reference_number, T.sticker_number, T.acknowledgement_status_code, T.acknowledgement_status_desc, T.response_status_code, T.response_status_desc, T.status AS status, T.recorded, T.cheque_number, T.bank, T.payment_number, T.payment_network, T.insurance_product_id, T.insurance_coverage_id, T.insurance_type_id, T.customer_id, T.branch_id, T.user_id, T.is_deleted, date_format(T.created_at, '%b %d, %y') as created_at, T.updated_at, C.full_name AS customername, R.name AS region, T.image_reference, I.name as coname, T.durations, T.is_approved, I.coverage_type, U.role as roles, T.motor_type, T.endorsement_premium_earned, T.tax_exemption_reference, T.tax_exemption_type, T.is_tax_exempted, I.product_type as product_type_coverage, T.insurer as last_insurer, T.expiry_date as last_expiry_date, T.currency_status, T.currency_rate, T.currency_title, T.first_loss, T.fleet_id_entry, T.reminder_date, T.reminder_status, T.staff_notes, T.cash_id, T.accessed_amount FROM transactions T INNER JOIN customers C ON C.id = T.customer_id INNER JOIN regions R ON R.id=C.region_id INNER JOIN insurance_coverages I ON T.insurance_coverage_id=I.id INNER JOIN users U ON U.id=T.user_id WHERE T.id=? ORDER BY T.id DESC", [$tranid]);
+        $transaction = Transaction::where('id',$id)->first();
         $regions = DB::select('SELECT * FROM regions ORDER BY name ASC');
 
-        $addons = DB::table('addons')->where('transaction_id', $tranid)->get();
+        $addons = DB::table('addons')->where('transaction_id', $id)->get();
 
 
 
@@ -978,7 +977,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
         $fleetids = '';
         $cash_id = 0;
 
-        foreach($transactions as $trans){
+        $trans = $transaction;
             $customerid=$trans->customer_id;
             $paymentmode=$trans->paymentmodes;
             $paymentmode=$trans->paymentmodes;
@@ -986,13 +985,9 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
             $product_types_id=$trans->insurance_product_id;
             $coverage_type = $trans->coverage_type;
             $user = $trans->user_id;
-            $roles = $trans->roles;
             $types_id = $trans->insurance_type_id;
-            $fleetids = $trans->fleet_id_entry;
-            $cash_id = $trans->cash_id;
-        }
+            $fleetids = $trans->fleet_id;
 
-        $cashstaff = User::where('id', $cash_id)->first();
 
         $ins_types = DB::table('insurance_products')->where('insurance_type_id', $types_id)->where('is_deleted', 0)->get();
         $ins_coverage = DB::table('insurance_coverages')->where('insurance_product_id', $product_types_id)->where('is_deleted', 0)->get();
@@ -1012,45 +1007,27 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
         if($imagereference != "" || $imagereference != null){
         $documents = DB::select("SELECT id, transaction_id, name, image_type, created_at, updated_at FROM motor_galleries WHERE transaction_id=?", [$imagereference]);
         }else{
-        $documents = DB::select("SELECT id, transaction_id, name, image_type, created_at, updated_at FROM motor_galleries WHERE transaction_id=?", [$tranid]);
+        $documents = DB::select("SELECT id, transaction_id, name, image_type, created_at, updated_at FROM motor_galleries WHERE transaction_id=?", [$id]);
         }
 
-        $endupgrade = DB::table('endorsement_upgrades')
+      /*  $endupgrade = DB::table('endorsement_upgrades')
                            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'endorsement_upgrades.to_coverage_id')
-                           ->where('endorsement_upgrades.transaction_id', $tranid)
+                           ->where('endorsement_upgrades.transaction_id', $id)
                            ->select('endorsement_upgrades.*', 'insurance_coverages.name as coverage_name')
                            ->get();
 
         $endchangerequest = DB::table('endorsement_details')
-                            ->where('transaction_id', $tranid)
-                            ->get();
+                            ->where('transaction_id', $id)
+                            ->get();*/
 
-        //get information of the branch or agent
-        $branch_agent_info = [];
-        if($roles == 'agent'){
 
-            $branch_agent_info = DB::table('users')
-            ->join('agents', 'agents.id', '=', 'users.user_id')
-            ->where('users.id', $user)
-            ->select('agents.*', 'users.role')
-            ->get();
-
-        }elseif($roles == 'admin'){
-
-            $branch_agent_info = DB::table('users')
-            ->join('branches', 'branches.id', '=', 'users.user_id')
-            ->where('users.id', $user)
-            ->select('branches.*', 'users.role')
-            ->get();
-
-        }
 
         if(Auth::user()->role=="admin"){
 
             $mobilestaff = [];
 
             if($paymentmode==3 || $paymentmode=="3"){
-                $mobilepayment=DB::select("SELECT * FROM mobile_payments WHERE order_id=? or order_id=?",["$tranid", "$fleetids"]);
+                $mobilepayment=DB::select("SELECT * FROM mobile_payments WHERE order_id=? or order_id=?",["$id", "$fleetids"]);
 
                 $mpid = 0;
                 foreach($mobilepayment as $datam)
@@ -1060,11 +1037,20 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
 
                 $mobilestaff = User::where('id', $mpid)->first();
 
-                return view('admin.transaction-info', compact('transactions','mobilestaff', 'cashstaff', 'customer', 'documents', 'mobilepayment', 'regions', 'endupgrade', 'endchangerequest', 'products', 'branch_agent_info', 'addons', 'ins_types', 'ins_coverage'));
+                return response()->json([
+                    'transaction' => $transaction ? $transaction : null,
+                    'customer' => count($customer) ? $customer[0] : null,
+                    'documents' => $documents,
+                    'mobile_payment' => count($mobilepayment) ? $mobilepayment[0] : null,
+                    'regions' => $regions,
+                    'products' => $products,
+
+                    'addons' => $addons
+                ]);
 
             }else if($paymentmode==2 || $paymentmode=="2"){
 
-                $bankpayment=DB::select("SELECT * FROM bank_payments WHERE order_id=? or order_id=?",["$tranid", "$fleetids"]);
+                $bankpayment=DB::select("SELECT * FROM bank_payments WHERE order_id=? or order_id=?",["$id", "$fleetids"]);
 
                 $payment_approved_by = [];
                 foreach($bankpayment as $data_bankpayment){
@@ -1072,33 +1058,47 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                     break;
                 }
 
-                return view('admin.transaction-info', compact('transactions', 'mobilestaff', 'cashstaff', 'customer', 'documents', 'bankpayment', 'regions', 'products', 'endupgrade', 'endchangerequest', 'branch_agent_info', 'payment_approved_by', 'addons', 'ins_types', 'ins_coverage'));
+                return response()->json([
+                    'transaction' => $transaction ? $transaction : null,
+                    'customer' => count($customer) ? $customer[0] : null,
+                    'documents' => $documents,
+                    'bank_payment' => count($bankpayment) ? $bankpayment[0] : null,
+                    'regions' => $regions,
+                    'products' => $products,
 
+                    'addons' => $addons
+                ]);
             }else{
-                return view('admin.transaction-info', compact('transactions','mobilestaff', 'cashstaff', 'customer', 'documents', 'regions', 'products', 'endupgrade', 'endchangerequest', 'branch_agent_info', 'addons', 'ins_types', 'ins_coverage'));
+                return response()->json([
+                    'transaction' => $transaction ? $transaction : null,
+                    'customer' => count($customer) ? $customer[0] : null,
+                    'documents' => $documents,
+                    'regions' => $regions,
+                    'products' => $products,
+
+                    'addons' => $addons
+                ]);
             }
         }elseif(Auth::user()->role=="agent"){
 
             if($paymentmode==3 || $paymentmode=="3"){
-                $mobilepayment=DB::select("SELECT * FROM mobile_payments WHERE order_id=? or order_id = ?",["$tranid", "$fleetids"]);
+                $mobilepayment=DB::select("SELECT * FROM mobile_payments WHERE order_id=? or order_id = ?",["$id", "$fleetids"]);
 
                     return response()->json([
-                        'transaction' => count($transactions) ? $transactions[0] : null,
+                        'transaction' => $transaction ? $transaction : null,
                         'customer' => count($customer) ? $customer[0] : null,
                         'documents' => $documents,
                         'mobile_payment' => count($mobilepayment) ? $mobilepayment[0] : null,
                         'regions' => $regions,
                         'products' => $products,
-                        'endupgrade' => $endupgrade,
-                        'endchangerequest' => $endchangerequest,
-                        'branch_agent_info' => count($branch_agent_info) ? $branch_agent_info[0] : null,
+
                         'addons' => $addons
                     ]);
 
 
             }else if($paymentmode==2 || $paymentmode=="2"){
 
-                $bankpayment=DB::select("SELECT * FROM bank_payments WHERE order_id=? or order_id=?",["$tranid", "$fleetids"]);
+                $bankpayment=DB::select("SELECT * FROM bank_payments WHERE order_id=? or order_id=?",["$id", "$fleetids"]);
 
                 $payment_approved_by = [];
                 foreach($bankpayment as $data_bankpayment){
@@ -1106,40 +1106,30 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                     break;
                 }
 
-                if(!apiReq()){
-                    return view('agent.transaction-info', compact('transactions', 'customer', 'documents', 'bankpayment', 'regions', 'products', 'endupgrade', 'endchangerequest', 'branch_agent_info', 'payment_approved_by', 'addons', 'ins_types', 'ins_coverage'));
-                } else {
-                    return response()->json([
-                        'transaction' => count($transactions) ? $transactions[0] : null,
+
+                  return response()->json([
+                        'transaction' => $transaction ? $transaction : null,
                         'customer' => count($customer) ? $customer[0] : null,
                         'documents' => $documents,
                         'bank_payment' => count($bankpayment) ? $bankpayment[0] : null,
                         'regions' => $regions,
                         'products' => $products,
-                        'endupgrade' => $endupgrade,
-                        'endchangerequest' => $endchangerequest,
-                        'branch_agent_info' => count($branch_agent_info) ? $branch_agent_info[0] : null,
-                        'payment_approved_by' => count($payment_approved_by) ? $payment_approved_by[0] : null,
+
                         'addons' => $addons
                     ]);
-                }
+
 
             }else{
-                if(!apiReq()){
-                    return view('agent.transaction-info', compact('transactions', 'customer', 'documents', 'regions', 'products', 'endupgrade', 'endchangerequest', 'branch_agent_info', 'addons', 'ins_types', 'ins_coverage'));
-                } else {
-                    return response()->json([
-                        'transaction' => count($transactions) ? $transactions[0] : null,
+
+                       return response()->json([
+                        'transaction' => $transaction ? $transaction : null,
                         'customer' => count($customer) ? $customer[0] : null,
                         'documents' => $documents,
                         'regions' => $regions,
                         'products' => $products,
-                        'endupgrade' => $endupgrade,
-                        'endchangerequest' => $endchangerequest,
-                        'branch_agent_info' => count($branch_agent_info) ? $branch_agent_info[0] : null,
+
                         'addons' => $addons
                     ]);
-                }
             }
         }
     }
@@ -1195,7 +1185,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                 ->join('users', 'users.id', '=', 'transactions.user_id')
                 ->join('branches', 'branches.id', '=', 'users.user_id')
                 ->where('users.role', 'admin')
-                ->where('branches.id', $branchid)
+
                 ->where('transactions.is_deleted',0)
                 ->whereDate('transactions.created_at','>=', $request->input('min'))
                 ->whereDate('transactions.created_at','<=', $request->input('max'))
@@ -1308,7 +1298,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                 ->join('users', 'users.id', '=', 'transactions.user_id')
                 ->join('branches', 'branches.id', '=', 'users.user_id')
                 ->where('users.role', 'admin')
-                ->where('branches.id', $branchid)
+
                 ->where('transactions.is_deleted',0)
                 ->whereYear('transactions.created_at', Carbon::now()->year)
                 ->whereMonth('transactions.created_at', $current)

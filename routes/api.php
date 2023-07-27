@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('expiring',[TransactionController::class,'expiring']);
+    Route::get('transaction-info/{id}',[TransactionController::class,'transactionInfo']);
 
 
 

@@ -41,6 +41,15 @@ const routes = [
         },
         props: true,
     },
+
+    {
+        path: '/transaction/:id',
+        component: require('./pages/admin/transaction/view.vue').default,
+        meta: {
+            title: 'Transaction|BimaKwik',
+        },
+        props: true,
+    },
     {
         path: '/expiring',
         component: require('./pages/admin/expiring/index.vue').default,

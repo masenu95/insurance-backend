@@ -183,16 +183,18 @@ export default {
             active:"all",
             int:1,
 
-             dropzoneOptions: {
-                url: '../../api/uploadInvoice',
-                thumbnailWidth: 200,
-                addRemoveLinks: true,
-                dictDefaultMessage: "<i class='fa fa-cloud-upload upload-icon'></i></i>Drag and drop a file here or click"
+            label: {
+                "Customer": "customer.full_name",
+                "Insurance Type": "insurance_type.name",
+                "Region": "customer.region.name",
+                "Vehicle": "registration_number",
+                "Start date": "covernote_start_date",
+                "End Date": "covernote_end_date",
+                "Sum Insured": "sum_insured",
+                "Total Premium": "total_premium_including_tax",
+
+                "status": "status"
             },
-            companies:[],
-            errors:[],
-            errorsWithdraw:[],
-            errorsEdit:[],
             headers: [{
                     value: 'index',
                     text: '#',
@@ -272,7 +274,7 @@ export default {
                 },
     async filterData(){
             this.loading=true;
-            const response = await axios.post('api/user-trans-filter',this.filter);
+            const response = await axios.post('api/success-filter',this.filter);
 
         this.all = response.data;
         this.loading=false;

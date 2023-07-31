@@ -25,6 +25,23 @@ class TransactionController extends Controller
 
     }
 
+    public function indexFilter(Request $request){
+        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->with('customer');
+
+        if($request->min != null&&$request->min != ""){
+            $data->whereDate('created_at','>=',$request->min);
+        }
+
+        if($request->max != null&&$request->max != ""){
+            $data->whereDate('created_at','<=',$request->max);
+        }
+
+                return response()->json($data->get());
+
+    }
+
+
+
 
     public function pending(Request $request){
         $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer')->get();
@@ -36,12 +53,44 @@ class TransactionController extends Controller
     }
 
 
+
+    public function pendingFilter(Request $request){
+        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer');
+
+        if($request->min != null&&$request->min != ""){
+            $data->whereDate('created_at','>=',$request->min);
+        }
+
+        if($request->max != null&&$request->max != ""){
+            $data->whereDate('created_at','<=',$request->max);
+        }
+
+                return response()->json($data->get());
+
+    }
+
+
     public function success(Request $request){
         $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer')->get();
 
 
 
                 return response()->json($data);
+
+    }
+
+    public function successFilter(Request $request){
+        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer');
+
+        if($request->min != null&&$request->min != ""){
+            $data->whereDate('created_at','>=',$request->min);
+        }
+
+        if($request->max != null&&$request->max != ""){
+            $data->whereDate('created_at','<=',$request->max);
+        }
+
+                return response()->json($data->get());
 
     }
 
@@ -318,11 +367,9 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
 
             }
 
-            if(apiReq()){
+
                 return response()->json($transactions);
-            } else {
-                return view('agent.cancelled-transaction', compact('transactions'));
-            }
+
             }
             }
     }
@@ -555,11 +602,9 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
 
             }
 
-            if(apiReq()){
+
                 return response()->json($transactions);
-            } else {
-              return view('agent.risk-note', compact('transactions'));
-            }
+
             }
 
             }else{
@@ -797,11 +842,9 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
 
             }
 
-            if(apiReq()){
+
                 return response()->json($transactions);
-            } else {
-                return view('agent.risk-note', compact('transactions'));
-            }
+
             }
             }
     }
@@ -1005,9 +1048,9 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
         ->get();
 
         if($imagereference != "" || $imagereference != null){
-        $documents = DB::select("SELECT id, transaction_id, name, image_type, created_at, updated_at FROM motor_galleries WHERE transaction_id=?", [$imagereference]);
+        $documents = DB::select("SELECT * FROM motor_galleries WHERE transaction_id=?", [$imagereference]);
         }else{
-        $documents = DB::select("SELECT id, transaction_id, name, image_type, created_at, updated_at FROM motor_galleries WHERE transaction_id=?", [$id]);
+        $documents = DB::select("SELECT * FROM motor_galleries WHERE transaction_id=?", [$id]);
         }
 
       /*  $endupgrade = DB::table('endorsement_upgrades')
@@ -1247,11 +1290,9 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                 ->orderBy('transactions.id', 'DESC')->get();
             }
 
-            if(!apiReq()){
-                return view('agent.month-transaction', compact('transactions'));
-            }else{
+
                 return response()->json($transactions);
-            }
+
         }
        }else{
 
@@ -1362,11 +1403,9 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
             }
 
 
-            if(!apiReq()){
-                return view('agent.month-transaction', compact('transactions'));
-            }else{
+
                 return response()->json($transactions);
-            }
+
         }
 
        }
@@ -1417,11 +1456,9 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                 'first_loss' => $firstloss
             ]);
 
-        if(!apiReq()){
+
             return redirect()->back()->with('success', 'Successful update start and end date');
-        } else {
-            return response()->json(null, 'Success');
-    }
+
     }
 
     public function sendTiraRe($requestid){
@@ -1461,11 +1498,11 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
             if($upd == true){
                 return redirect()->back()->with("success", "Transaction successful marked as recorded");
             }else{
-                return redirect()->back()->with("message-error", "Fail to mark transaction as recorded to Meticulous System");
+                return redirect()->back()->with("message-error", "Fail to mark transaction as recorded to BImaKwik System");
             }
         }
         else{
-            return redirect()->back()->with("message-error", "Fail to mark transaction as recorded to Meticulous System");
+            return redirect()->back()->with("message-error", "Fail to mark transaction as recorded to BImaKwik System");
         }
     }
 

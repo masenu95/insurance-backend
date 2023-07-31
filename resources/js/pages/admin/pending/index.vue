@@ -69,7 +69,7 @@
                                         <div class="col-6">
                                             <ul class="header-dropdown" style="float:right">
                                                 <li>
-                                                    <download-excel class="btn btn-info excel-green" :data="invoices" :fields="label" title="export excel" worksheet="My Worksheet" name="Invoices.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
+                                                    <download-excel class="btn btn-info excel-green" :data="all" :fields="label" title="export excel" worksheet="My Worksheet" name="pending.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
                                                     </download-excel>
                                                 </li>
                                             </ul>
@@ -163,36 +163,13 @@ export default {
             processes:[],
             display:false,
             filter:{
-             reference:"",
-             pending:"",
-             mobile:null,
-             service:null,
-             channel:null,
-             bank:null,
-             from:"",
-             to:"",
-             amountStart:"",
-             amountEnd:""
+           min:"",
+           max:"",
             },
 
-            current:[],
-            progress:0,
-            previusStage:null,
-            nextStage:null,
-            availabeAmount:0,
+
             active:"all",
-            int:1,
 
-             dropzoneOptions: {
-                url: '../../api/uploadInvoice',
-                thumbnailWidth: 200,
-                addRemoveLinks: true,
-                dictDefaultMessage: "<i class='fa fa-cloud-upload upload-icon'></i></i>Drag and drop a file here or click"
-            },
-            companies:[],
-            errors:[],
-            errorsWithdraw:[],
-            errorsEdit:[],
             headers: [{
                     value: 'index',
                     text: '#',
@@ -252,6 +229,18 @@ export default {
 
             ],
 
+            label: {
+                "Customer": "customer.full_name",
+                "Insurance Type": "insurance_type.name",
+                "Region": "customer.region.name",
+                "Vehicle": "registration_number",
+                "Start date": "covernote_start_date",
+                "End Date": "covernote_end_date",
+                "Sum Insured": "sum_insured",
+                "Total Premium": "total_premium_including_tax",
+
+                "status": "status"
+            },
         };
     },
 
@@ -285,7 +274,7 @@ export default {
                 },
     async filterData(){
             this.loading=true;
-            const response = await axios.post('api/user-trans-filter',this.filter);
+            const response = await axios.post('api/pending-filter',this.filter);
 
         this.all = response.data;
         this.loading=false;
@@ -347,24 +336,7 @@ export default {
 
         },
 
-           completed(){
-             this.load = true;
-            this.active = "success";
 
-            const result = this.all.filter( ({ status }) => status === 'ACTIVE' );
-            this.success = result;
-
-            this.load = false;
-        },
-    incomplete(){
-             this.load = true;
-            this.active = "pending";
-
-            const result = this.all.filter( ({ status }) => status === 'PENDING' );
-            this.pending = result;
-
-            this.load = false;
-        },
 
 
     },

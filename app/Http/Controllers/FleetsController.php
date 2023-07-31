@@ -832,7 +832,7 @@ class FleetsController extends Controller
 
         //other information
         $systemcode = "SYS0003";
-        $callbackurl = "http://metvaps.vusha.co.tz/api/covernoteref/resp";
+        $callbackurl = "http://bimakwik.com/api/covernoteref/resp";
         $insurercompanycode = "IC001";
         $trancompanycode = "IC001";
         $covernotetype = 1;

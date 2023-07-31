@@ -22,9 +22,7 @@
 
                             </div>
                             <ul class="nav nav-tabs page-header-tab">
-                                <li class="nav-item">
-                                    <router-link to="../../transaction" class="nav-link">Transaction</router-link>
-                                </li>
+
                                 <li class="nav-item"><a class="nav-link active">Details</a></li>
 
                             </ul>
@@ -263,15 +261,148 @@
 
                                                             </div>
                                                             <div class="card mb-4" :class="tab=='payment'?'active show':'hide'" role="tabpanel">
+                                                                <div class="row gx-3 mb-3">
+                                                                            <!-- Form Group (first name)-->
 
+                                                                            <!-- Form Group (last name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Amount</label>
+                                                                                <div class="description">{{transaction.transaction.total_premium_including_tax|formatNumber}}</div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Status</label>
+                                                                                <div class="description">{{transaction.transaction.status}}</div>
+                                                                            </div>
+                                                                        </div>
                                                             </div>
                                                             <div class="card mb-4" :class="tab=='motor'?'active show':'hide'">
+                                                                <div class="row gx-3 mb-3">
+                                                                            <!-- Form Group (first name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Owner Name</label>
+                                                                                <div class="description">{{transaction.transaction.owner_name}}</div>
+                                                                            </div>
+                                                                            <!-- Form Group (last name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Owner Category</label>
+                                                                                <div class="description"><span v-if="transaction.transaction.owner_category == '1'">Sole </span><span v-else>Cooperate</span></div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Owner Address</label>
+                                                                                <div class="description">{{transaction.transaction.owner_address}}</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row gx-3 mb-3">
+                                                                            <!-- Form Group (first name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Year of Manufacture</label>
+                                                                                <div class="description">{{transaction.transaction.year_Of_manufacture}}</div>
+                                                                            </div>
+                                                                            <!-- Form Group (last name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Registration Number</label>
+                                                                                <div class="description">{{transaction.transaction.registration_number }}</div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Chassis Number</label>
+                                                                                <div class="description">{{transaction.transaction.chassis_number}}</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row gx-3 mb-3">
+                                                                            <!-- Form Group (first name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Motor Usage</label>
+                                                                                <div class="description"><span v-if="transaction.transaction.motor_usage">Private</span><span v-else>Commercial</span></div>
+                                                                            </div>
+                                                                            <!-- Form Group (last name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Motor Category</label>
+                                                                                <div class="description"><span v-if="transaction.transaction.registration_number == '1'">Private</span><span v-else>Cooperate</span></div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Make</label>
+                                                                                <div class="description">{{transaction.transaction.make}}</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row gx-3 mb-3">
+                                                                            <!-- Form Group (first name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Model</label>
+                                                                                <div class="description">{{transaction.transaction.model}}</div>
+                                                                            </div>
+                                                                            <!-- Form Group (last name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Model Number</label>
+                                                                                <div class="description">{{transaction.transaction.model_number}}</div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Make</label>
+                                                                                <div class="description">{{transaction.transaction.body_type}}</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row gx-3 mb-3">
+                                                                            <!-- Form Group (first name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Color</label>
+                                                                                <div class="description">{{transaction.transaction.color}}</div>
+                                                                            </div>
+                                                                            <!-- Form Group (last name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Engine Number</label>
+                                                                                <div class="description">{{transaction.transaction.engine_number}}</div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Engine Capacity</label>
+                                                                                <div class="description">{{transaction.transaction.engine_capacity}}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row gx-3 mb-3">
+                                                                            <!-- Form Group (first name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Fuel Used</label>
+                                                                                <div class="description">{{transaction.transaction.fuel_used}}</div>
+                                                                            </div>
+                                                                            <!-- Form Group (last name)-->
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Number of Axles</label>
+                                                                                <div class="description">{{transaction.transaction.axles_number}}</div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="title-detail">Axles Distance</label>
+                                                                                <div class="description">{{transaction.transaction.axles_distance}}</div>
+                                                                            </div>
+                                                                        </div>
 
                                                             </div>
 
-                                                            <div class="card mb-4" :class="tab=='document'?'active show':'hide'">
+                                                            <div class="card mb-4 " :class="tab=='document'?'active show':'hide'">
 
 
+                                                                <div class="row gx-3 mb-3">
+                                                                            <!-- Form Group (first name)-->
+                                                                            <div class="col-md-4" v-for="document in transaction.documents" :key="document">
+                                                                                <label class="title-detail">{{document.name}}</label>
+                                                                                <div class="description">
+                                                                                        <img :src="host+document.url" style="height:200px;width: 200px ;">
+                                                                                </div>
+                                                                                <div>
+                                                                                    Created at: {{ document.time }}<br>
+                                                                                    Location: {{ document.location }}
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
 
 
                                                             </div>
@@ -310,6 +441,7 @@
             return {
                 id:"",
                 tab: "customer",
+                host:window.location.protocol + "//" + window.location.host,
                 loading:true,
                 mobile:false,
                 transaction:[],

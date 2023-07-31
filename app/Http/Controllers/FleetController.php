@@ -173,7 +173,7 @@ class FleetController extends Controller
 
         //get data from prev selection and action
         $systemcode = "SYS0003";
-        $callbackurl = "http://metvaps.vusha.co.tz/api/covernoteref/resp";
+        $callbackurl = "http://bimakwik.com/api/covernoteref/resp";
         $insurercompanycode = "IC001";
         $trancompanycode = "IC001";
 
@@ -287,7 +287,7 @@ class FleetController extends Controller
     }else{
 
         $banned_motor = BanMotor::where('registration_number', $request->input("registrationnumber"))->first();
-        return redirect()->back()->with('error', "Sorry you can not issue cover with that motor, Bimakwik Insurance banned the motor to be issued on Metvaps, reason to be ban is $banned_motor->reason");
+        return redirect()->back()->with('error', "Sorry you can not issue cover with that motor, Bimakwik Insurance banned the motor to be issued on bimakwik, reason to be ban is $banned_motor->reason");
     }
 
     }
@@ -306,7 +306,7 @@ class FleetController extends Controller
 
         //get data from prev selection and action
         $systemcode = "SYS0003";
-        $callbackurl = "http://metvaps.vusha.co.tz/api/covernoteref/resp";
+        $callbackurl = "http://bimakwik.com/api/covernoteref/resp";
         $insurercompanycode = "IC001";
         $trancompanycode = "IC001";
 
@@ -416,7 +416,7 @@ class FleetController extends Controller
     }else{
 
         $banned_motor = BanMotor::where('registration_number', $request->input("registrationnumber"))->first();
-        return redirect()->back()->with('error', "Sorry you can not issue cover with that motor, Bimakwik Insurance banned the motor to be issued on Metvaps, reason to be ban is $banned_motor->reason");
+        return redirect()->back()->with('error', "Sorry you can not issue cover with that motor, Bimakwik Insurance banned the motor to be issued on bimakwik, reason to be ban is $banned_motor->reason");
     }
 
     }

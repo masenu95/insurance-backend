@@ -41,6 +41,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('expiring',[TransactionController::class,'expiring']);
+
+
+
+    Route::post('pending-filter',[TransactionController::class,'pendingFilter']);
+
+
+    Route::post('success-filter',[TransactionController::class,'successFilter']);
+
+
+    Route::post('index-filter',[TransactionController::class,'indexFilter']);
+
+
+    Route::get('expiring',[TransactionController::class,'expiring']);
     Route::get('transaction-info/{id}',[TransactionController::class,'transactionInfo']);
 
 

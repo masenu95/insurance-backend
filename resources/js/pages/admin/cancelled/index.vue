@@ -5,7 +5,7 @@
 <admin-header v-on:childToParent="menuclick"></admin-header>
     <!-- Start Rightbar setting panel -->
 <!-- Start Main leftbar navigation -->
-       <sidebar-left link="pending"></sidebar-left>
+       <sidebar-left link="cancellation"></sidebar-left>
     <!-- Start project content area -->
     <!-- Start project content area -->
     <div class="page">
@@ -17,7 +17,7 @@
                 <div class="d-flex justify-content-between align-items-center ">
 
                     <div class="header-action">
-                        <h1 class="page-title">Pendings</h1>
+                        <h1 class="page-title">Cancelled</h1>
                         <ol class="breadcrumb page-breadcrumb">
                             <li class="breadcrumb-item"><router-link to="#">BimaKwik</router-link></li>
                         </ol>
@@ -33,7 +33,7 @@
                         <div class="filter" style="padding:30px 15px">
                                 <div class="">
 
-                                    <h4><span>AllPending</span>
+                                    <h4><span>All Cancelled Cover</span>
                                         <article class="filter-range-date">
                                             <form @submit.prevent="filterData">
                                                 <section class="form-col3-left">
@@ -69,7 +69,7 @@
                                         <div class="col-6">
                                             <ul class="header-dropdown" style="float:right">
                                                 <li>
-                                                    <download-excel class="btn btn-info excel-green" :data="all" :fields="label" title="export excel" worksheet="My Worksheet" name="pending.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
+                                                    <download-excel class="btn btn-info excel-green" :data="all" :fields="label" title="export excel" worksheet="My Worksheet" name="cancellation.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
                                                     </download-excel>
                                                 </li>
                                             </ul>
@@ -108,7 +108,7 @@
                                 </template>
                                        <template v-slot:item.actn="props">
 
-                                        <span class="badge alert-info"  title="View"><router-link :to="'../../transaction/'+props.item.id"><i class="fa-solid fa-expand"></i></router-link></span>
+                                   <span class="badge alert-success" v-if=" props.item.status.toUpperCase() != 'ACTIVE'" title="Approve"><button @click.prevent="approve(props.item)"><i class="fa-solid fa-check-double"></i></button></span>
 
 
 
@@ -163,12 +163,13 @@ export default {
             processes:[],
             display:false,
             filter:{
-           min:"",
-           max:"",
+            min:"",
+            max:"",
             },
 
 
             active:"all",
+            int:1,
 
             headers: [{
                     value: 'index',
@@ -188,12 +189,6 @@ export default {
                     text: 'Region',
                     value: 'customer.region.name',
                 },
-
-                {
-                    text: 'Expiring',
-                    value: 'covernote_end_date',
-                },
-
 
                 {
                     text: 'Payment',
@@ -228,7 +223,6 @@ export default {
                 },
 
             ],
-
             label: {
                 "Customer": "customer.full_name",
                 "Insurance Type": "insurance_type.name",
@@ -241,20 +235,17 @@ export default {
 
                 "status": "status"
             },
+
         };
     },
 
     async beforeMount(){
                 this.user = JSON.parse(localStorage.getItem('user'));
 
-        const res = await axios.get('api/pending');
+        const res = await axios.get('../api/cancel');
              this.all = res.data;
 
-        const staff = await axios.get('../../api/active-staff');
-        const result = await axios.get('api/flow-process/'+9+'/'+staff.data.role_id);
 
-        const resp = await axios.get('api/flow-by-process/'+9);
-        this.processes = resp.data;
 
 
 
@@ -274,7 +265,7 @@ export default {
                 },
     async filterData(){
             this.loading=true;
-            const response = await axios.post('api/pending-filter',this.filter);
+            const response = await axios.post('api/cancel-filter',this.filter);
 
         this.all = response.data;
         this.loading=false;
@@ -282,59 +273,6 @@ export default {
 
     },
 
-
-
-        async approve(item){
-
-
-             try{
-
-
-                  var result = await this.$swal({
-            title: 'Are you sure you want to approve '+item.pendingId,
-            text: "You won't be able to revert this action!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#000',
-            confirmButtonText: 'Yes, confirm !'
-        });
-        if (result.isConfirmed) {
-           const response = await axios.get('../api/pending-approved/'+item.id+'/'+this.user.role +' approved');
-          if(response.status == 200){
-                  const response = await axios.get('api/pendings');
-            this.all =response.data;
-
-             this.loading=false;
-
-
-                this.$swal(
-                'Confirmed Refresh browser!',
-                response.data,
-                'success'
-            )
-          }
-
-        }
-
-
-
-
-
-            }catch(e){
-                    console.log(e);
-                    this.$toast.open({
-                            message: 'Internal server error',
-                            type: 'error',
-                            duration: 5000,
-                            position: 'bottom-right'
-                            // all of other options may go here
-                        });
-
-                 this.loading=false;
-            }
-
-        },
 
 
 

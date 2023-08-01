@@ -33,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('transactions',[TransactionController::class,'index']);
 
+    Route::get('cancel-policy/{id}',[TransactionController::class,'cancelled']);
+
 
     Route::get('pending',[TransactionController::class,'pending']);
 
@@ -41,6 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('expiring',[TransactionController::class,'expiring']);
+
+
+    Route::get('cancel',[TransactionController::class,'cancel']);
+
+    Route::post('cancel-filter',[TransactionController::class,'cancelFilter']);
 
 
 

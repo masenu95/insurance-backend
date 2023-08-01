@@ -59,6 +59,15 @@ const routes = [
         props: true,
     },
 
+    {
+        path: '/cancelled',
+        component: require('./pages/admin/cancelled/index.vue').default,
+        meta: {
+            title: 'Cancel|BimaKwik',
+        },
+        props: true,
+    },
+
     //authentication route
     {
         path: '/login',

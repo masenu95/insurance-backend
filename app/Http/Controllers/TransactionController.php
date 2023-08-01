@@ -25,6 +25,20 @@ class TransactionController extends Controller
 
     }
 
+
+    public function cancelled($id){
+        $data = Transaction::where('id',$id)->first();
+
+        $data->update([
+            'status'=>'Cancelled',
+        ]);
+
+
+
+                return response()->json($data);
+
+    }
+
     public function indexFilter(Request $request){
         $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->with('customer');
 
@@ -56,6 +70,33 @@ class TransactionController extends Controller
 
     public function pendingFilter(Request $request){
         $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer');
+
+        if($request->min != null&&$request->min != ""){
+            $data->whereDate('created_at','>=',$request->min);
+        }
+
+        if($request->max != null&&$request->max != ""){
+            $data->whereDate('created_at','<=',$request->max);
+        }
+
+                return response()->json($data->get());
+
+    }
+
+
+    public function cancel(Request $request){
+        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer')->get();
+
+
+
+                return response()->json($data);
+
+    }
+
+
+
+    public function cancelFilter(Request $request){
+        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer');
 
         if($request->min != null&&$request->min != ""){
             $data->whereDate('created_at','>=',$request->min);
@@ -115,7 +156,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
     }
 
 
-    public function cancelled(Request $request){
+    public function cancellion(Request $request){
         if($request->input('filter')=='filter'){
 
             if(Auth::user()->role=="admin"){
@@ -409,7 +450,7 @@ $expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
                       ->where('transactions.fleet_status_entry', '!=','FLEET')
                       ->select('transactions.*', 'customers.full_name AS customername', 'regions.name AS region', 'insurance_types.name as typenames', 'agents.name AS baname', 'users.first_name', 'users.last_name')
                       ->orderBy('transactions.id', 'DESC')->get();
-//
+//cancelled
                       $transactions_c = DB::table('transactions')
                       ->join('customers', 'customers.id', '=', 'transactions.customer_id')
                       ->join('regions', 'regions.id', '=', 'customers.region_id')

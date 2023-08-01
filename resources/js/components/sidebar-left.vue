@@ -11,6 +11,7 @@
                         <li :class="this.link=='pending'?'active':''"><router-link to="../pending"><i class="fa fa-bank"></i><span>Pending</span></router-link></li>
                         <li :class="this.link=='success'?'active':''"><router-link to="../success"><i class="fa fa-industry"></i><span>Success</span></router-link></li>
                         <li :class="this.link=='expiring'?'active':''"><router-link to="../expiring"><i class="fa fa-building"></i><span>Expiring</span></router-link></li>
+                        <li :class="this.link=='cancellation'?'active':''"><router-link to="../cancelled"><i class="fa-solid fa-ban"></i><span>Cancellation</span></router-link></li>
                         <li :class="this.link=='transaction'?'active':''"><router-link to="../transactions"><i class="fas fa-coins"></i><span>Transactions</span></router-link>
                     </li>
 

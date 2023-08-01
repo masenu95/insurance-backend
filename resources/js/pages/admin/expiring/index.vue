@@ -245,6 +245,18 @@ export default {
                 },
 
             ],
+            label: {
+                "Customer": "customer.full_name",
+                "Insurance Type": "insurance_type.name",
+                "Region": "customer.region.name",
+                "Vehicle": "registration_number",
+                "Start date": "covernote_start_date",
+                "End Date": "covernote_end_date",
+                "Sum Insured": "sum_insured",
+                "Total Premium": "total_premium_including_tax",
+
+                "status": "status"
+            },
 
         };
     },
@@ -255,17 +267,7 @@ export default {
         const res = await axios.get('../api/expiring');
              this.all = res.data;
 
-        const staff = await axios.get('../../api/active-staff');
-        const result = await axios.get('api/flow-process/'+9+'/'+staff.data.role_id);
 
-        const resp = await axios.get('api/flow-by-process/'+9);
-        this.processes = resp.data;
-
-
-
-        this.process = result.data;
-
-        this.staff = staff.data;
 
     },
 
@@ -279,7 +281,7 @@ export default {
                 },
     async filterData(){
             this.loading=true;
-            const response = await axios.post('api/user-trans-filter',this.filter);
+            const response = await axios.post('api/expiring-filter',this.filter);
 
         this.all = response.data;
         this.loading=false;

@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FleetController;
 use App\Http\Controllers\FleetsController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\PaymentController;
@@ -62,6 +63,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('expiring',[TransactionController::class,'expiring']);
     Route::get('transaction-info/{id}',[TransactionController::class,'transactionInfo']);
+
+    Route::resource('health',HealthController::class);
+
+    Route::post('beneficial',[HealthController::class,'beneficial']);
 
 
 

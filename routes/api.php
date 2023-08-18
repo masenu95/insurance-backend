@@ -68,6 +68,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('beneficial',[HealthController::class,'beneficial']);
 
+    Route::post('health-pay',[PaymentController::class,'mobileHealth']);
+
 
 
    Route::post('/create-motor-detail-tpo',[MotorController::class,'tpo']);
@@ -127,3 +129,7 @@ Route::post('get-Token', [AuthController::class,'getToken']);
 Route::post('login', [AuthController::class,'login']);
 
 Route::post('/callback',[PaymentController::class,'callback']);
+
+Route::post('/callbackHealth',[PaymentController::class,'callbackHealth']);
+
+

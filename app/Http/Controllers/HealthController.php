@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attachment;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Stmt\Foreach_;
 
 class HealthController extends Controller
 {
@@ -39,6 +41,7 @@ class HealthController extends Controller
             'district'=>'required',
             'street'=>'required',
             'marital'=>'required',
+            'dependents'=>'required',
 
         ]);
 
@@ -52,6 +55,23 @@ class HealthController extends Controller
             'marital_status'=>$validated['maritial'],
             'user_id'=>Auth::user()->id,
         ]);
+
+        $dependents  =  $request->json('dependents');
+
+        foreach ($dependents as $dependent) {
+
+
+
+            $data = Member::create([
+                'name'=>$dependent->name,
+                'dob'=>$dependent->dob,
+                'gender'=>$dependent->gender,
+                'relationship'=>$dependent->relationship,
+                'member_id'=>$dependent->member,
+                'user_id'=>Auth::user()->id,
+            ]);
+
+        }
 
         return response()->json($data, 200,);
     }
@@ -94,9 +114,23 @@ class HealthController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function attachment(Request $request)
     {
         //
+
+        $validated = $request->validate([
+            'member'=>'required',
+            'url'=>'required',
+            'path'=>'required',
+        ]);
+
+        $data = Attachment::create([
+            'member_id'=>$request->member,
+            'url'=>$request->url,
+            'path'=>$request->path,
+            'user_id'=>Auth::user()->id,
+        ]);
+        return response()->json($data, 200);
     }
 
     /**

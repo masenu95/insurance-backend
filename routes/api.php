@@ -70,6 +70,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('health-pay',[PaymentController::class,'mobileHealth']);
 
+    Route::post('health-attachment', [HealthController::class,'attachment']);
+
 
 
    Route::post('/create-motor-detail-tpo',[MotorController::class,'tpo']);

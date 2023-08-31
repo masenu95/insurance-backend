@@ -185,6 +185,7 @@ export default {
             errors:[],
             errorsWithdraw:[],
             errorsEdit:[],
+            healthHeader:[],
             headers: [{
                     value: 'index',
                     text: '#',

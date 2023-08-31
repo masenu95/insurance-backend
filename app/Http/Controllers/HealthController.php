@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attachment;
+use App\Models\Beneficial;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,7 +63,7 @@ class HealthController extends Controller
 
 
 
-            $data = Member::create([
+            $data = Beneficial::create([
                 'name'=>$dependent->name,
                 'dob'=>$dependent->dob,
                 'gender'=>$dependent->gender,

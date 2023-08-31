@@ -60,6 +60,15 @@ const routes = [
     },
 
     {
+        path:'/admin-company',
+        component:require('./pages/admin/company/index.vue').default,
+        meta:{
+            title:"Insurer|BimaKwik",
+        },
+        props:true,
+    },
+
+    {
         path: '/cancelled',
         component: require('./pages/admin/cancelled/index.vue').default,
         meta: {

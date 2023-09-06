@@ -10,7 +10,7 @@ class Agent extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','region','district','idtype','idno','commission_rate'];
+    protected $fillable = ['user_id','region','district','idtype','idno','commission_rate','path','url'];
 
     /**
      * Get the user that owns the Agent

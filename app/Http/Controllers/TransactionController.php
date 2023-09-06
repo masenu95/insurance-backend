@@ -17,7 +17,17 @@ use Illuminate\Support\Facades\Http;
 class TransactionController extends Controller
 {
     public function index(Request $request){
-        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->with('customer')->get();
+        $data = [];
+
+        if(Auth::user()->role == 'admin'){
+            $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->with('customer')->get();
+
+        }else if(Auth::user()->role == 'company'){
+            $data = Transaction::with('user')->where('insurance_company_id',Auth::user()->identity)->where('total_premium_including_tax','>',5000)->with('customer')->get();
+        }else if(Auth::user()->role == 'agent'){
+            $data = Transaction::with('user')->where('user_id',Auth::user()->id)->where('total_premium_including_tax','>',5000)->with('customer')->get();
+
+        }
 
 
 
@@ -40,7 +50,17 @@ class TransactionController extends Controller
     }
 
     public function indexFilter(Request $request){
-        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->with('customer');
+        $data = [];
+
+        if(Auth::user()->role == 'admin'){
+            $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->with('customer');
+
+        }else if(Auth::user()->role == 'company'){
+            $data = Transaction::with('user')->where('insurance_company_id',Auth::user()->identity)->where('total_premium_including_tax','>',5000)->with('customer');
+        }else if(Auth::user()->role == 'agent'){
+            $data = Transaction::with('user')->where('user_id',Auth::user()->id)->where('total_premium_including_tax','>',5000)->with('customer');
+
+        }
 
         if($request->min != null&&$request->min != ""){
             $data->whereDate('created_at','>=',$request->min);
@@ -58,18 +78,40 @@ class TransactionController extends Controller
 
 
     public function pending(Request $request){
-        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer')->get();
+
+        $data = [];
+
+        if(Auth::user()->role == 'admin'){
+            $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer');
+
+        }else if(Auth::user()->role == 'company'){
+            $data = Transaction::with('user')->where('insurance_company_id',Auth::user()->identity)->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer');
+        }else if(Auth::user()->role == 'agent'){
+            $data = Transaction::with('user')->where('user_id',Auth::user()->id)->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer');
+
+        }
 
 
 
-                return response()->json($data);
+                return response()->json($data->get(),200);
 
     }
 
 
 
     public function pendingFilter(Request $request){
-        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer');
+
+        $data = [];
+
+        if(Auth::user()->role == 'admin'){
+            $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer');
+
+        }else if(Auth::user()->role == 'company'){
+            $data = Transaction::with('user')->where('insurance_company_id',Auth::user()->identity)->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer');
+        }else if(Auth::user()->role == 'agent'){
+            $data = Transaction::with('user')->where('user_id',Auth::user()->id)->where('total_premium_including_tax','>',5000)->where('status','Pending')->with('customer');
+
+        }
 
         if($request->min != null&&$request->min != ""){
             $data->whereDate('created_at','>=',$request->min);
@@ -79,25 +121,44 @@ class TransactionController extends Controller
             $data->whereDate('created_at','<=',$request->max);
         }
 
-                return response()->json($data->get());
+                return response()->json($data->get(),200);
 
     }
 
 
     public function cancel(Request $request){
-        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer')->get();
+
+        $data = [];
+
+        if(Auth::user()->role == 'admin'){
+            $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer');
+        }else if(Auth::user()->role == 'company'){
+            $data = Transaction::with('user')->where('insurance_company_id',Auth::user()->identity)->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer');
+        }else if(Auth::user()->role == 'agent'){
+            $data = Transaction::with('user')->where('user_id',Auth::user()->id)->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer');
+
+        }
 
 
 
-                return response()->json($data);
+
+                return response()->json($data->get(),200);
 
     }
 
 
 
     public function cancelFilter(Request $request){
-        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer');
+        $data = [];
 
+        if(Auth::user()->role == 'admin'){
+            $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer');
+        }else if(Auth::user()->role == 'company'){
+            $data = Transaction::with('user')->where('insurance_company_id',Auth::user()->identity)->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer');
+        }else if(Auth::user()->role == 'agent'){
+            $data = Transaction::with('user')->where('user_id',Auth::user()->id)->where('total_premium_including_tax','>',5000)->where('status','Cancelled')->with('customer');
+
+        }
         if($request->min != null&&$request->min != ""){
             $data->whereDate('created_at','>=',$request->min);
         }
@@ -112,16 +173,35 @@ class TransactionController extends Controller
 
 
     public function success(Request $request){
-        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer')->get();
+
+        $data = [];
+
+        if(Auth::user()->role == 'admin'){
+            $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer');
+        }else if(Auth::user()->role == 'company'){
+            $data = Transaction::with('user')->where('insurance_company_id',Auth::user()->identity)->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer');
+        }else if(Auth::user()->role == 'agent'){
+            $data = Transaction::with('user')->where('user_id',Auth::user()->id)->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer');
+
+        }
 
 
 
-                return response()->json($data);
+                return response()->json($data->get());
 
     }
 
     public function successFilter(Request $request){
-        $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer');
+        $data = [];
+
+        if(Auth::user()->role == 'admin'){
+            $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer');
+        }else if(Auth::user()->role == 'company'){
+            $data = Transaction::with('user')->where('insurance_company_id',Auth::user()->identity)->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer');
+        }else if(Auth::user()->role == 'agent'){
+            $data = Transaction::with('user')->where('user_id',Auth::user()->id)->where('total_premium_including_tax','>',5000)->where('status','Success')->with('customer');
+
+        }
 
         if($request->min != null&&$request->min != ""){
             $data->whereDate('created_at','>=',$request->min);
@@ -146,12 +226,22 @@ $nearExpiryPolicies = Transaction::where('covernote_end_date', '>', $currentDate
 ->get();
 
 // Filter expired policies
-$expiredPolicies = Transaction::where('covernote_end_date', '<=', $currentDate)
-->get();
+
+$data = [];
+
+if(Auth::user()->role == 'admin'){
+    $data = Transaction::with('user')->where('total_premium_including_tax','>',5000)->where('covernote_end_date', '<=', $currentDate)->with('customer');
+}else if(Auth::user()->role == 'company'){
+    $data = Transaction::with('user')->where('insurance_company_id',Auth::user()->identity)->where('total_premium_including_tax','>',5000)->where('covernote_end_date', '<=', $currentDate)->with('customer');
+}else if(Auth::user()->role == 'agent'){
+    $data = Transaction::with('user')->where('user_id',Auth::user()->id)->where('total_premium_including_tax','>',5000)->where('covernote_end_date', '<=', $currentDate)->with('customer');
+
+}
 
 
 
-                return response()->json($nearExpiryPolicies);
+
+                return response()->json($nearExpiryPolicies->get());
 
     }
 

@@ -41,7 +41,7 @@ Vue.component('date-picker', require('vue-datetime'));
 
 Vue.component('admin-header',require('./components/header.vue').default);
 Vue.component('sidebar-left',require('./components/sidebar-left.vue').default);
-Vue.component('staff-sidebar-left',require('./components/staff-side-left.vue').default);
+Vue.component('strategy-sidebar-left',require('./components/strategy-side-left.vue').default);
 Vue.component('borrower-sidebar-left',require('./components/borrower-side-left.vue').default);
 Vue.component('investor-sidebar-left',require('./components/investor-side-left.vue').default);
 Vue.component('top-nav',require('./components/top-nav-bar.vue').default);

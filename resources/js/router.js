@@ -69,6 +69,15 @@ const routes = [
     },
 
     {
+        path:'/admin-agents',
+        component:require('./pages/admin/agents/index.vue').default,
+        meta:{
+            title:"Insurer|BimaKwik",
+        },
+        props:true,
+    },
+
+    {
         path: '/cancelled',
         component: require('./pages/admin/cancelled/index.vue').default,
         meta: {
@@ -94,6 +103,26 @@ const routes = [
         component: require('./pages/admin/home.vue').default,
         meta: {
             title: 'Home|BimaKwik',
+            requiresAuth: true,
+        },
+        props: true,
+    },
+
+    {
+        path: '/strategy-home',
+        component: require('./pages/strategy/home.vue').default,
+        meta: {
+            title: 'Home|BimaKwik',
+            requiresAuth: true,
+        },
+        props: true,
+    },
+
+    {
+        path: '/strategy-request',
+        component: require('./pages/strategy/request/index.vue').default,
+        meta: {
+            title: 'Request|BimaKwik',
             requiresAuth: true,
         },
         props: true,

@@ -8,8 +8,8 @@
                 <nav class="sidebar-nav" style="padding-top: 40px;">
                     <ul :class="gridmenu?'metismenu grid':'metismenu'">
                         <li :class="this.link=='home'?'active':''"><router-link to="../admin-home"><i class="fa fa-dashboard"></i><span>Dashboard</span></router-link></li>
-                        <li :class="this.link=='company'?'active':''"><router-link to="../admin-company"><i class="fa fa-company"></i><span>Company</span></router-link></li>
-                        <li :class="this.link=='agents'?'active':''"><router-link to="../admin-agents"><i class="fa fa-users"></i><span>Agents</span></router-link></li>
+                        <li :class="this.link=='company'?'active':''" v-if="user.role == 'admin'"><router-link to="../admin-company"><i class="fa fa-company"></i><span>Company</span></router-link></li>
+                        <li :class="this.link=='agents'?'active':''" v-if="user.role == 'admin'"><router-link to="../admin-agents"><i class="fa fa-users"></i><span>Agents</span></router-link></li>
                         <li :class="this.link=='pending'?'active':''"><router-link to="../pending"><i class="fa fa-bank"></i><span>Pending</span></router-link></li>
                         <li :class="this.link=='success'?'active':''"><router-link to="../success"><i class="fa fa-industry"></i><span>Success</span></router-link></li>
                         <li :class="this.link=='expiring'?'active':''"><router-link to="../expiring"><i class="fa fa-building"></i><span>Expiring</span></router-link></li>

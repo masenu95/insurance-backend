@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\InsuranceCompany;
 use App\Models\InsuranceType;
+use App\Models\User;
+use Exception;
+use Faker\Provider\ar_EG\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
 {
@@ -57,6 +61,18 @@ class CompanyController extends Controller
             'phone'=>'required',
             'url'=>'required',
             'path'=>'required',
+        ]);
+
+
+        $user = User::create([
+            'username'=>$validated['name'],
+            'first_name'=>$validated['name'],
+            'last_name'=>$validated['name'],
+            'email'=>$validated['email'],
+            'phone'=>$validated['phone'],
+            'role'=>'company',
+            'password'=>Hash::make(123456),
+
         ]);
 
         $data = InsuranceCompany::create([
@@ -139,5 +155,28 @@ class CompanyController extends Controller
     public function destroy(string $id)
     {
         //
+
+        $data = InsuranceCompany::find($id);
+
+        if($data->policies >=1){
+            $data->update([
+                'status'=>'DELETED'
+            ]);
+
+            return response()->json(['message'=>'success'], 200);
+        }else{
+            try{
+                $data->delete();
+            }catch(Exception $e){
+                $data->update([
+                    'status'=>'DELETED'
+                ]);
+            }
+
+                return response()->json(['message'=>'success'], 200);
+
+        }
+
+
     }
 }

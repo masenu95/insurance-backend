@@ -40,7 +40,7 @@ class InsuranceController extends Controller
 
 
     public function getRegion(){
-        $data = Region::get();
+        $data = Region::with('districts')->get();
         return response()->json($data, 200);
     }
 

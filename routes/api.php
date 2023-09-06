@@ -83,6 +83,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
    Route::resource('company',CompanyController::class);
 
+   Route::post('company-update/{id}', [CompanyController::class,'update']);
+
    Route::get('insurance-type',[InsuranceController::class,'getInsuranceType']);
 
 Route::get('insurance-product/{id}',[InsuranceController::class,'getInsuranceProduct']);
@@ -135,3 +137,4 @@ Route::post('/callback',[PaymentController::class,'callback']);
 Route::post('/callbackHealth',[PaymentController::class,'callbackHealth']);
 
 
+Route::post('upload-file',[UploadController::class,'uploadImage']);

@@ -3,8 +3,8 @@
             <div class="container-fluid">
                 <div class="page-header">
                     <div class="left" style="font-weight: 700;">
-                            Balance : &nbsp; <router-link to="/wallet" style="padding:5px 10px;border-radius:6px;border: 1px solid black;border-radius: 5px;color: black;font-weight: 700;background-color:rgb(232, 223, 202);"> {{(selectedBalance ? selectedBalance:this.balance) | formatNumber}} </router-link>
-                    </div>
+                           <!-- Balance : &nbsp; <router-link to="/wallet" style="padding:5px 10px;border-radius:6px;border: 1px solid black;border-radius: 5px;color: black;font-weight: 700;background-color:rgb(232, 223, 202);"> {{(selectedBalance ? selectedBalance:this.balance) | formatNumber}} </router-link>
+                           --></div>
                     <div class="right">
 
                         <div class="notification d-flex">

@@ -6,12 +6,91 @@
         activator="parent"
         width="auto"
       >
-        <v-card>
-          <v-card-text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        <v-card style="padding: 30px;width: 500px;">
+          <v-card-text >
+                <form style="">
+                    <div style="width: 100%;display: flex;flex-direction: column;align-items: center;position: relative; !important">
+                        <img :src="url+form.url" alt="" style="width: 150px;height: 150px;">
+
+
+                        <div class="upload-icon">
+
+                            <label for="upload-img"><i class="fas fa-camera camera-icon" ></i></label>
+                            <input type="file" style="display: none;" id="upload-img" @change="uploadImage">
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label for="">Insurance Name</label>
+
+                        <input type="text" class="form-control" v-model="form.name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Phone</label>
+                        <input type="text" class="form-control" v-model="form.phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Email</label>
+                        <input type="text" class="form-control" v-model="form.email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Code</label>
+                        <input type="text" class="form-control" v-model="form.code">
+                    </div>
+                </form>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" block @click="dialog = false">Close Dialog</v-btn>
+            <v-btn color="primary" block @click="submit">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        v-model="editDialog"
+        activator="parent"
+        width="auto"
+      >
+        <v-card style="padding: 30px;width: 500px;">
+          <v-card-text >
+                <form style="">
+                    <div style="width: 100%;display: flex;flex-direction: column;align-items: center;position: relative; !important">
+                        <img :src="url+formEdit.url" alt="" style="width: 150px;height: 150px;">
+
+
+                        <div class="upload-icon">
+
+                            <label for="upload-img"><i class="fas fa-camera camera-icon" ></i></label>
+                            <input type="file" style="display: none;" id="upload-img" @change="uploadImageEdit">
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label for="">Insurance Name</label>
+
+                        <input type="text" class="form-control" v-model="formEdit.name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Phone</label>
+                        <input type="text" class="form-control" v-model="formEdit.phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Email</label>
+                        <input type="text" class="form-control" v-model="formEdit.email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Code</label>
+                        <input type="text" class="form-control" v-model="formEdit.code">
+                    </div>
+                </form>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" block @click="submitEdit">Update</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -84,7 +163,7 @@
                                         <div class="col-6">
                                             <ul class="header-dropdown inline-button" style="float:right;">
                                                 <li>
-                                                    <download-excel class="btn btn-info excel-green" :data="invoices" :fields="label" title="export excel" worksheet="My Worksheet" name="Invoices.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
+                                                    <download-excel class="btn btn-info excel-green" :data="all" :fields="label" title="export excel" worksheet="My Worksheet" name="companies.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
                                                     </download-excel>
                                                 </li>
                                                 <li>
@@ -126,8 +205,19 @@
                                 </template>
                                        <template v-slot:item.actn="props">
 
-                                   <span class="badge alert-success" v-if=" props.item.status.toUpperCase() != 'ACTIVE'" title="Approve"><button @click.prevent="approve(props.item)"><i class="fa-solid fa-check-double"></i></button></span>
 
+                                   <span class="badge alert-success">
+                                            <button> <i class="fas fa-expand"></i> View</button>
+                                    </span>
+
+                                    <span class="badge alert-info">
+                                            <button @click="editEnable(props.item.id)"> <i class="fas fa-edit"></i> Edit</button>
+                                    </span>
+
+
+                                    <!--<span class="badge alert-danger">
+                                            <button @click="removeItems(props.item.id,index)"> <i class="fas fa-bin"></i> Delete</button>
+                                    </span>-->
 
 
                                 </template>
@@ -163,49 +253,47 @@ export default {
         return {
             all:[],
            url:window.location.protocol + "//" + window.location.host,
-            load:false,
-            wallet:[],
+
             search:"",
-            balance:0,
+            editDialog:false,
+            form:{
+                name:"",
+                phone:"",
+                email:"",
+                code:"",
+                url:"/images/user.png",
+                path:"",
+            },
+
+            formEdit:{
+                id:"",
+                name:"",
+                phone:"",
+                email:"",
+                code:"",
+                url:"/images/user.png",
+                path:"",
+            },
+
             loading:false,
             dialog:false,
-            progress:0,
-            current:[],
-            previusStage:null,
-            nextStage:null,
-            staff:[],
-            flow:[],
+
               process:[],
             mobile:false,
             processes:[],
             display:false,
             filter:{
-             reference:"",
-             transaction:"",
-             mobile:null,
-             service:null,
-             channel:null,
-             bank:null,
+
              from:"",
              to:"",
-             amountStart:"",
-             amountEnd:""
+
             },
 
-            current:[],
-            progress:0,
-            previusStage:null,
-            nextStage:null,
-            availabeAmount:0,
+
             active:"all",
             int:1,
 
-             dropzoneOptions: {
-                url: '../../api/uploadInvoice',
-                thumbnailWidth: 200,
-                addRemoveLinks: true,
-                dictDefaultMessage: "<i class='fa fa-cloud-upload upload-icon'></i></i>Drag and drop a file here or click"
-            },
+
             companies:[],
             errors:[],
             errorsWithdraw:[],
@@ -254,19 +342,16 @@ export default {
 
                 {
                     text: '',
-                    value: 'action'
+                    value: 'actn'
                 },
 
             ],
             label: {
-                "Customer": "customer.full_name",
-                "Insurance Type": "insurance_type.name",
-                "Region": "customer.region.name",
-                "Vehicle": "registration_number",
-                "Start date": "covernote_start_date",
-                "End Date": "covernote_end_date",
-                "Sum Insured": "sum_insured",
-                "Total Premium": "total_premium_including_tax",
+                "Company Name": "name",
+                "Phone": "phone",
+                "Email": "email",
+                "Policies": "policies",
+                "Claim":"claims",
 
                 "status": "status"
             },
@@ -292,6 +377,43 @@ export default {
        menuclick (value) {
                     this.mobile = value
                 },
+
+                async removeItems(id,index){
+      var result = await this.$swal({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        });
+        if (result.isConfirmed) {
+            try{
+          var response = await axios.delete('../../api/company/'+id);
+          if(response.status == 200){
+
+                this.$swal(
+                'Deleted!',
+                response.data,
+                'success'
+            )
+             const res = await axios.get('api/company');
+             this.all= res.data;
+          }
+          }catch(e){
+                 this.$toast.open({
+                            message: e.response.data.error,
+                            type: 'error',
+                            duration: 5000,
+                            position: 'bottom-right'
+                            // all of other options may go here
+                        });
+          }
+
+        }
+
+    },
     async filterData(){
             this.loading=true;
             const response = await axios.post('api/expiring-filter',this.filter);
@@ -301,6 +423,53 @@ export default {
 
 
     },
+
+
+      async  uploadImage(event) {
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('image', file);
+
+      this.loading = true;
+
+      const resp = await axios.post('api/upload-file',formData);
+
+      console.log(resp.data);
+
+      this.form.url = resp.data.url;
+      this.form.path = resp.data.path;
+
+      this.loading = false;
+
+
+
+
+
+    },
+
+    async  uploadImageEdit(event) {
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('image', file);
+
+      this.loading = true;
+
+      const resp = await axios.post('api/upload-file',formData);
+
+      console.log(resp.data);
+
+      this.formEdit.url = resp.data.url;
+      this.formEdit.path = resp.data.path;
+
+      this.loading = false;
+
+
+
+
+
+    },
+
+
 
 
 
@@ -356,23 +525,80 @@ export default {
 
         },
 
-           completed(){
-             this.load = true;
-            this.active = "success";
+           async submit(){
+             this.loading =true;
 
-            const result = this.all.filter( ({ status }) => status === 'ACTIVE' );
-            this.success = result;
+             try{
 
-            this.load = false;
+                const resp =  axios.post('../api/company',this.form);
+
+
+
+                const res = await axios.get('../api/company');
+             this.all = res.data;
+
+                this.loading = false;
+
+                this.dialog =false;
+
+                this.$swal(
+                'Company added',
+                'success');
+
+
+
+
+             }catch(e){
+
+             }
         },
-    incomplete(){
-             this.load = true;
-            this.active = "pending";
 
-            const result = this.all.filter( ({ status }) => status === 'PENDING' );
-            this.pending = result;
+        editEnable(id){
+           const company =  this.all.filter(item => item.id === id);
 
-            this.load = false;
+           console.log(company);
+
+           this.editDialog = true;
+
+           this.formEdit.name = company[0].name;
+           this.formEdit.code = company[0].company_code;
+           this.formEdit.phone = company[0].phone;
+           this.formEdit.url = company[0].logo_url;
+           this.formEdit.id= company[0].id;
+           this.formEdit.path= company[0].logo_path;
+           this.formEdit.email = company[0].email;
+
+
+
+        },
+
+
+            async submitEdit(){
+             this.loading =true;
+
+             try{
+
+                const resp =  axios.post('../api/company-update/'+this.formEdit.id,this.formEdit);
+
+
+
+                const res = await axios.get('../api/company');
+             this.all = res.data;
+
+                this.loading = false;
+
+                this.editDialog =false;
+
+                this.$swal(
+                'Company edited',
+                'success');
+
+
+
+
+             }catch(e){
+
+             }
         },
 
 
@@ -400,6 +626,16 @@ watch: {
 <style scoped>
 .inline-button li{
     display: inline;
+}
+
+.upload-icon{
+    position: absolute;
+    color: black;
+    bottom: 10px;
+}
+.camera-icon{
+    font-size: 25px;
+
 }
 
 </style>

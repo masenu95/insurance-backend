@@ -30,5 +30,19 @@ class UploadController extends Controller
 
     }
 
+    public function uploadImage(Request $request){
+
+        $validated = $request->validate([
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:10048',
+        ]);
+
+        $file =$validated['image'];
+
+        $path = $file->store('public/logo');
+
+        $url = Storage::url($path);
+
+        return response()->json(['url'=>$url,'path'=>$path], 200);
+    }
 
 }

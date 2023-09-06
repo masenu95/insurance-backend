@@ -15,6 +15,10 @@ class AgentController extends Controller
     public function index()
     {
         //
+
+        $data = Agent::with('user')->get();
+
+        return response()->json($data, 200);
     }
 
     /**
@@ -44,6 +48,7 @@ class AgentController extends Controller
             'idtype'=>'required',
             'idno'=>'required',
             'rate'=>'required',
+            'url'=>'required',
         ]);
 
 
@@ -56,6 +61,7 @@ class AgentController extends Controller
             'role'=>$validated['role'],
             'password'=>Hash::make(123456),
 
+
         ]);
 
 
@@ -66,6 +72,8 @@ class AgentController extends Controller
             'idno'=>$validated['idno'],
             'commission_rate'=>$validated['rate'],
             'user_id'=>$user->id,
+            'url'=>$validated['url'],
+            'path'=>$request->path,
         ]);
 
         $data = Agent::where('id',$agent->id)->with('user')->first();

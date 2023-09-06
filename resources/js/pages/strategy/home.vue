@@ -9,7 +9,7 @@
             <!-- Start Quick menu with more functio -->
 
             <!-- Start Main leftbar navigation -->
-            <sidebar-left link="home"></sidebar-left>
+            <strategy-sidebar-left link="home"></strategy-sidebar-left>
             <!-- Start project content area -->
             <div class="page">
                 <!-- Start Page header -->
@@ -39,8 +39,8 @@
 
                                         <router-link to="/staff-motor" class="my_sort_cut text-muted">
                                             <i style="color:#fff" class="fa fa-address-book"></i>
-                                            <span style="color:#fff">Motor</span>
-                                            <h5 style="color:#fff">{{motorCount|formatNumber}}</h5>
+                                            <span style="color:#fff">Active</span>
+                                            <h5 style="color:#fff">{{activeCount|formatNumber}}</h5>
                                         </router-link>
                                     </div>
                                 </div>
@@ -51,8 +51,8 @@
 
                                         <router-link to="/staff-life" class="my_sort_cut text-muted">
                                             <i style="color:#fff" class="fa fa-user-circle-o"></i>
-                                            <span style="color:#fff">Life</span>
-                                            <h5 style="color:#fff">{{lifeCount|formatNumber}}</h5>
+                                            <span style="color:#fff">Request</span>
+                                            <h5 style="color:#fff">{{requestCount|formatNumber}}</h5>
                                         </router-link>
                                     </div>
                                 </div>
@@ -63,8 +63,8 @@
 
                                         <router-link to="/staff-invoice" class="my_sort_cut text-muted">
                                             <i class="fa fa-folder"></i>
-                                            <span>Marine</span>
-                                            <h5>{{invoiceCount|formatNumber}}</h5>
+                                            <span>Processing</span>
+                                            <h5>{{processingCount|formatNumber}}</h5>
                                         </router-link>
                                     </div>
                                 </div>
@@ -75,8 +75,8 @@
 
                                         <router-link to="/staff-engineering" class="my_sort_cut text-muted">
                                             <i class="fa fa-gavel" aria-hidden="true"></i>
-                                            <span>Engineering</span>
-                                            <h5>{{engineeringCount|formatNumber}}</h5>
+                                            <span>Expiring</span>
+                                            <h5>{{expiringCount|formatNumber}}</h5>
                                         </router-link>
                                     </div>
                                 </div>
@@ -97,7 +97,7 @@
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="admin-Dashboard" role="tabpanel">
                                 <div class="row clearfix row-deck">
-                                    <div class="col-xl-8 col-lg-8 col-md-12">
+                                    <!--<div class="col-xl-8 col-lg-8 col-md-12">
                                         <div class="card">
                                             <div class="card-header">
                                                 <h3 class="card-title">Transactions</h3>
@@ -135,7 +135,7 @@
                                                 </Doughnut>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <!--<div class="row clearfix">
                                     <div class="col-xl-12">
@@ -459,12 +459,12 @@
                 search: "",
                 search: "",
                 mobile: false,
-                invoiceCount: 0,
+                processingCount: 0,
                 staffCount: 0,
-                engineeringCount: 0,
-                lifeCount: 0,
+                expiringCount: 0,
+                requestCount: 0,
                 transCount: 0,
-                motorCount: 0,
+                activeCount: 0,
                 limit: 0,
                 marine: [],
                 purpleLineChart: {
@@ -561,12 +561,12 @@
 
             const stat = await axios.get('/api/admin-stat');
 
-            this.invoiceCount = stat.data.invoice;
+            this.processingCount = stat.data.invoice;
             this.transCount = stat.data.trans;
-            this.engineeringCount = stat.data.engineering;
-            this.lifeCount = stat.data.life;
+            this.expiringCount = stat.data.engineering;
+            this.requestCount = stat.data.life;
             this.staffCount = stat.data.staff;
-            this.motorCount = stat.data.motor;
+            this.activeCount = stat.data.motor;
 
             const marine = await axios.get('/api/admin-latest-invoice');
             this.marine = marine.data;

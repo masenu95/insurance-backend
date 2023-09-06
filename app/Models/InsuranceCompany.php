@@ -10,7 +10,7 @@ class InsuranceCompany extends Model
     use HasFactory;
 
 
-    protected $fillable = ['name','company_code','email','phone','logo_url','logo_path','user_id'];
+    protected $fillable = ['name','company_code','email','phone','logo_url','logo_path','user_id','policies','status'];
 
 
     /**

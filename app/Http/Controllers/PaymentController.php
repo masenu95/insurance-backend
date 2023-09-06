@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ApigwClient\Client;
 use App\Models\BankPayments;
 use App\Models\HTransaction;
+use App\Models\Member;
 use App\Models\MobilePayment;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -68,6 +69,13 @@ class PaymentController extends Controller
 
         $data = HTransaction::where('order_id',$orderId)->first();
 
+        $member =Member::find($orderId);
+
+
+
+
+
+
         $remain = $data->amount -$amount;
 
         $data->update([
@@ -82,6 +90,9 @@ class PaymentController extends Controller
         ]);
 
         if($result == 'SUCCESS'&&$paymentStatus=='COMPLETED'){
+            $member->update([
+                'status'=>'PENDING'
+            ]);
             return response()->json(["error"=>200,"result"=>'Success',"order_id"=>$orderId,"message"=>'Callback successfully received'], 200);
         }else{
             return response()->json(["error"=>418,"result"=>'Failed',"message"=>'Callback failed, please resend'], 418);

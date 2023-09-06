@@ -128,6 +128,46 @@ const routes = [
         props: true,
     },
 
+    {
+        path: '/strategy-active',
+        component: require('./pages/strategy/active/index.vue').default,
+        meta: {
+            title: 'Request|BimaKwik',
+            requiresAuth: true,
+        },
+        props: true,
+    },
+
+    {
+        path: '/strategy-processing',
+        component: require('./pages/strategy/processing/index.vue').default,
+        meta: {
+            title: 'Request|BimaKwik',
+            requiresAuth: true,
+        },
+        props: true,
+    },
+
+    {
+        path: '/strategy-expire',
+        component: require('./pages/strategy/expire/index.vue').default,
+        meta: {
+            title: 'Request|BimaKwik',
+            requiresAuth: true,
+        },
+        props: true,
+    },
+
+    {
+        path: '/strategy-transactions',
+        component: require('./pages/strategy/transaction/index.vue').default,
+        meta: {
+            title: 'Request|BimaKwik',
+            requiresAuth: true,
+        },
+        props: true,
+    },
+
 
 
 

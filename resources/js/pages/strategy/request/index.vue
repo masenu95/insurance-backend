@@ -176,39 +176,39 @@ export default {
                     sortable: false,
                 },
                 {
-                    text: 'customer',
-                    value: 'customer.full_name',
+                    text: 'Name',
+                    value: 'name',
                 },
                 {
-                    text: 'Type',
-                    value: 'insurance_type.name',
+                    text: 'Birthday',
+                    value: 'dob',
+                },
+
+                {
+                    text: 'Gender',
+                    value: 'gender',
                 },
 
                 {
                     text: 'Region',
-                    value: 'customer.region.name',
-                },
-
-                {
-                    text: 'Expiring',
-                    value: 'covernote_end_date',
+                    value: 'region',
                 },
 
 
                 {
-                    text: 'Payment',
-                    value: 'payment_mode',
+                    text: 'District',
+                    value: 'district',
                 },
 
 
                 {
-                    text: 'Vehicle',
-                    value: 'registration_number',
+                    text: 'Street',
+                    value: 'street',
                 },
 
                 {
-                    text: 'Premium',
-                    value: 'premium',
+                    text: 'Marital Status',
+                    value: 'marital_status',
                 },
 
                 {
@@ -230,15 +230,13 @@ export default {
             ],
 
             label: {
-                "Customer": "customer.full_name",
-                "Insurance Type": "insurance_type.name",
-                "Region": "customer.region.name",
-                "Vehicle": "registration_number",
-                "Start date": "covernote_start_date",
-                "End Date": "covernote_end_date",
-                "Sum Insured": "sum_insured",
-                "Total Premium": "total_premium_including_tax",
-
+                "Name": "name",
+                "Birthday": "dob",
+                "Gender": "customer.region.name",
+                "Region": "region",
+                "District": "district",
+                "Street": "street",
+                "Marital Status": "marital_status",
                 "status": "status"
             },
         };

@@ -381,6 +381,8 @@
                 await localStorage.setItem('user',JSON.stringify(response.data.user))
             await localStorage.setItem('token',response.data.token)
 
+            const user = JSON.stringify(response.data.user);
+
                 const access_token = localStorage.getItem('token');
 
                 axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
@@ -390,7 +392,13 @@
 
                 axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
                     this.loading=false;
-                            this.$router.push('admin-home');
+
+                    if(user.role == 'Health'){
+                        this.$router.push('strategy-home');
+                    }else{
+                        this.$router.push('admin-home');
+                    }
+
 
 
                 } catch(e){

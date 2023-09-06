@@ -5,7 +5,7 @@
 <admin-header v-on:childToParent="menuclick"></admin-header>
     <!-- Start Rightbar setting panel -->
 <!-- Start Main leftbar navigation -->
-<strategy-sidebar-left link="processing"></strategy-sidebar-left>
+<strategy-sidebar-left link="active"></strategy-sidebar-left>
     <!-- Start project content area -->
     <!-- Start project content area -->
     <div class="page">
@@ -17,7 +17,7 @@
                 <div class="d-flex justify-content-between align-items-center ">
 
                     <div class="header-action">
-                        <h1 class="page-title">Transactions</h1>
+                        <h1 class="page-title">Active</h1>
                         <ol class="breadcrumb page-breadcrumb">
                             <li class="breadcrumb-item"><router-link to="#">BimaKwik</router-link></li>
                         </ol>
@@ -33,7 +33,7 @@
                         <div class="filter" style="padding:30px 15px">
                                 <div class="">
 
-                                    <h4><span>AllTransaction</span>
+                                    <h4><span>All Active</span>
                                         <article class="filter-range-date">
                                             <form @submit.prevent="filterData">
                                                 <section class="form-col3-left">
@@ -69,7 +69,7 @@
                                         <div class="col-6">
                                             <ul class="header-dropdown" style="float:right">
                                                 <li>
-                                                    <download-excel class="btn btn-info excel-green" :data="all" :fields="label" title="export excel" worksheet="My Worksheet" name="transactions.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
+                                                    <download-excel class="btn btn-info excel-green" :data="all" :fields="label" title="export excel" worksheet="My Worksheet" name="pending.xls" style="color:#fff"><i class="fas fa-file-excel" style="color:#fff"></i>&nbsp; Excel
                                                     </download-excel>
                                                 </li>
                                             </ul>
@@ -107,6 +107,9 @@
 
                                 </template>
                                        <template v-slot:item.actn="props">
+
+                                        <span class="badge alert-info"  title="View"><router-link :to="'../../transaction/'+props.item.id"><i class="fa-solid fa-expand"></i></router-link></span>
+
 
 
                                 </template>
@@ -160,62 +163,52 @@ export default {
             processes:[],
             display:false,
             filter:{
-            min:"",
-            max:"",
+           min:"",
+           max:"",
             },
 
-            current:[],
-            progress:0,
-            previusStage:null,
-            nextStage:null,
-            availabeAmount:0,
+
             active:"all",
-            int:1,
 
-             dropzoneOptions: {
-                url: '../../api/uploadInvoice',
-                thumbnailWidth: 200,
-                addRemoveLinks: true,
-                dictDefaultMessage: "<i class='fa fa-cloud-upload upload-icon'></i></i>Drag and drop a file here or click"
-            },
-            companies:[],
-            errors:[],
-            errorsWithdraw:[],
-            errorsEdit:[],
-            healthHeader:[],
             headers: [{
                     value: 'index',
                     text: '#',
                     sortable: false,
                 },
                 {
-                    text: 'customer',
-                    value: 'customer.full_name',
+                    text: 'Name',
+                    value: 'name',
                 },
                 {
-                    text: 'Type',
-                    value: 'insurance_type.name',
+                    text: 'Birthday',
+                    value: 'dob',
+                },
+
+                {
+                    text: 'Gender',
+                    value: 'gender',
                 },
 
                 {
                     text: 'Region',
-                    value: 'customer.region.name',
-                },
-
-                {
-                    text: 'Payment',
-                    value: 'payment_mode',
+                    value: 'region',
                 },
 
 
                 {
-                    text: 'Vehicle',
-                    value: 'registration_number',
+                    text: 'District',
+                    value: 'district',
+                },
+
+
+                {
+                    text: 'Street',
+                    value: 'street',
                 },
 
                 {
-                    text: 'Premium',
-                    value: 'premium',
+                    text: 'Marital Status',
+                    value: 'marital_status',
                 },
 
                 {
@@ -231,33 +224,41 @@ export default {
 
                 {
                     text: '',
-                    value: 'actn'
+                    value: 'action'
                 },
 
             ],
 
             label: {
-                "Customer": "customer.full_name",
-                "Insurance Type": "insurance_type.name",
-                "Region": "customer.region.name",
-                "Vehicle": "registration_number",
-                "Start date": "covernote_start_date",
-                "End Date": "covernote_end_date",
-                "Sum Insured": "sum_insured",
-                "Total Premium": "total_premium_including_tax",
-
+                "Name": "name",
+                "Birthday": "dob",
+                "Gender": "customer.region.name",
+                "Region": "region",
+                "District": "district",
+                "Street": "street",
+                "Marital Status": "marital_status",
                 "status": "status"
             },
-
         };
     },
 
     async beforeMount(){
                 this.user = JSON.parse(localStorage.getItem('user'));
 
-        const res = await axios.get('api/transactions');
+        const res = await axios.get('api/health-pending');
              this.all = res.data;
 
+        const staff = await axios.get('../../api/active-staff');
+        const result = await axios.get('api/flow-process/'+9+'/'+staff.data.role_id);
+
+        const resp = await axios.get('api/flow-by-process/'+9);
+        this.processes = resp.data;
+
+
+
+        this.process = result.data;
+
+        this.staff = staff.data;
 
     },
 
@@ -271,7 +272,7 @@ export default {
                 },
     async filterData(){
             this.loading=true;
-            const response = await axios.post('api/index-filter',this.filter);
+            const response = await axios.post('api/pending-filter',this.filter);
 
         this.all = response.data;
         this.loading=false;
@@ -288,7 +289,7 @@ export default {
 
 
                   var result = await this.$swal({
-            title: 'Are you sure you want to approve '+item.transactionId,
+            title: 'Are you sure you want to approve '+item.pendingId,
             text: "You won't be able to revert this action!",
             icon: 'warning',
             showCancelButton: true,
@@ -297,9 +298,9 @@ export default {
             confirmButtonText: 'Yes, confirm !'
         });
         if (result.isConfirmed) {
-           const response = await axios.get('../api/transaction-approved/'+item.id+'/'+this.user.role +' approved');
+           const response = await axios.get('../api/pending-approved/'+item.id+'/'+this.user.role +' approved');
           if(response.status == 200){
-                  const response = await axios.get('api/transactions');
+                  const response = await axios.get('api/pendings');
             this.all =response.data;
 
              this.loading=false;
@@ -332,7 +333,6 @@ export default {
             }
 
         },
-
 
 
 

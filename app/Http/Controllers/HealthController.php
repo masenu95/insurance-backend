@@ -17,6 +17,15 @@ class HealthController extends Controller
     public function index()
     {
         //
+
+
+    }
+
+    public function index()
+    {
+        //
+
+
     }
 
     /**
@@ -55,6 +64,7 @@ class HealthController extends Controller
             'street'=>$validated['street'],
             'marital_status'=>$validated['maritial'],
             'user_id'=>Auth::user()->id,
+            'status'=>'PENDING-PAYMENT',
         ]);
 
         $dependents  =  $request->json('dependents');

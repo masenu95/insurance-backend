@@ -11,8 +11,8 @@
                   <li :class="this.link=='pending'?'active':''"><router-link to="../strategy-request"><i class="fa fa-bank"></i><span>Request</span></router-link></li>
                   <li :class="this.link=='active'?'active':''"><router-link to="../strategy-active"><i class="fa fa-industry"></i><span>Active</span></router-link></li>
                   <li :class="this.link=='processing'?'active':''"><router-link to="../strategy-processing"><i class="fa fa-building"></i><span>Processing</span></router-link></li>
-                  <li :class="this.link=='expiring'?'active':''"><router-link to="../strategy--expiring"><i class="fa-solid fa-ban"></i><span>Expiring</span></router-link></li>
-                  <li :class="this.link=='transaction'?'active':''"><router-link to="../transactions"><i class="fas fa-coins"></i><span>Transactions</span></router-link>
+                  <li :class="this.link=='expiring'?'active':''"><router-link to="../strategy-expire"><i class="fa-solid fa-ban"></i><span>Expiring</span></router-link></li>
+                  <li :class="this.link=='transaction'?'active':''"><router-link to="../strategy-transactions"><i class="fas fa-coins"></i><span>Transactions</span></router-link>
               </li>
 
               </ul>

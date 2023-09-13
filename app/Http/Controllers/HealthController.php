@@ -46,7 +46,6 @@ class HealthController extends Controller
             'district'=>'required',
             'street'=>'required',
             'marital'=>'required',
-            'dependents'=>'required',
 
         ]);
 

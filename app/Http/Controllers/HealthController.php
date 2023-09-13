@@ -68,7 +68,7 @@ class HealthController extends Controller
 
 
 
-            $data = Beneficial::create([
+            $benef = Beneficial::create([
                 'name'=>$dependent->name,
                 'dob'=>$dependent->dob,
                 'gender'=>$dependent->gender,

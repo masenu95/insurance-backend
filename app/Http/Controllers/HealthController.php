@@ -62,6 +62,9 @@ class HealthController extends Controller
             'status'=>'PENDING-PAYMENT',
         ]);
 
+        if($request->json('dependents')){
+
+
         $dependents  =  $request->json('dependents');
 
         foreach ($dependents as $dependent) {
@@ -78,6 +81,9 @@ class HealthController extends Controller
             ]);
 
         }
+
+        }
+
 
         return response()->json($data, 200,);
     }

@@ -56,7 +56,7 @@ class HealthController extends Controller
             'region'=>$validated['region'],
             'district'=>$validated['district'],
             'street'=>$validated['street'],
-            'marital_status'=>$validated['maritial'],
+            'marital_status'=>$validated['marital'],
             'user_id'=>Auth::user()->id,
             'status'=>'PENDING-PAYMENT',
         ]);

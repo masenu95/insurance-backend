@@ -31,17 +31,17 @@ class NotificationService
             $info = User::where('id', $transaction->user_id)->first();
             if($info->role == "admin"){
                 if($transaction->insurance_type_id==2){
-                    $message = "Asante. Sticker: {$transaction->sticker_number}, Cover Note:{$transaction->covernote_reference_number} for {$transaction->registration_number}, Amount TZS {$premium} from {$startdate} to {$enddate} - BImaKwik General Insurance";
+                    $message = "Thank you. Sticker: {$transaction->sticker_number}, Cover Note:{$transaction->covernote_reference_number} for {$transaction->registration_number}, Amount TZS {$premium} from {$startdate} to {$enddate} - BimaKwik App";
                 }else{
-                    $message = "Asante. Cover Note:{$transaction->covernote_reference_number}, Amount TZS {$premium} from {$startdate} to {$enddate} - BImaKwik General Insurance";
+                    $message = "Thank you. Cover Note:{$transaction->covernote_reference_number}, Amount TZS {$premium} from {$startdate} to {$enddate} - BImaKwik General Insurance";
                 }
             }else{
 
                 $agent_name = Agent::where('id', $info->user_id)->first();
                 if($transaction->insurance_type_id==2){
-                    $message = "Asante. Sticker: {$transaction->sticker_number}, Cover Note:{$transaction->covernote_reference_number} for {$transaction->registration_number}, Amount TZS {$premium} from {$startdate} to {$enddate}, Agency name: $agent_name->name, Insurer: BImaKwik General Insurance";
+                    $message = "Thank you. Sticker: {$transaction->sticker_number}, Cover Note:{$transaction->covernote_reference_number} for {$transaction->registration_number}, Amount TZS {$premium} from {$startdate} to {$enddate}, Agency name: $agent_name->name, Insurer: BImaKwik App";
                 }else{
-                    $message = "Asante. Cover Note:{$transaction->covernote_reference_number}, Amount TZS {$premium} from {$startdate} to {$enddate}, Agency name: $agent_name->name, Insurer: BImaKwik General Insurance";
+                    $message = "Thank you. Cover Note:{$transaction->covernote_reference_number}, Amount TZS {$premium} from {$startdate} to {$enddate}, Agency name: $agent_name->name, Insurer: BImaKwik General Insurance";
                 }
             }
 

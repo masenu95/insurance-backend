@@ -10,8 +10,8 @@ use App\Helpers\Helper;
 use App\Models\Addon;
 use App\Models\FleetEntry;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Spatie\ArrayToXml\ArrayToXml;
+use Illuminate\Support\Facades\DB;
 
 const TIRA_SUCCESS_CODE = 'TIRA001';
 const TIRA_SUCCESS_DESC = 'Successful';
@@ -44,7 +44,6 @@ class CoverNoteController extends Controller
         $trans = $this->getTransaction($id);
         if($trans->insurance_type_id != 2){
         $trans->request_id = generateRequestID();
-        //checking if transaction is successful
         if($trans->acknowledgement_status_code == "TIRA001" && $trans->acknowledgement_status_desc == "Successful" && $trans->response_status_code == "TIRA001" && $trans->response_status_desc == "Successful"){
             return response()->json($trans);
         }else{
@@ -74,8 +73,8 @@ class CoverNoteController extends Controller
                 'CoverNoteDtl' => [
                     'CoverNoteNumber' => $trans->covernote_number,
                     'PrevCoverNoteReferenceNumber' => $trans->prev_covernote_reference_number,
-                    'SalePointCode' => $trans->sales_point_code,//env('SALES_POINT_CODE')
-                    'CoverNoteStartDate' => $CoverNoteStartDate,
+                    'SalePointCode' => $trans->sales_point_code == "SP001" ? "SP588" : $trans->sales_point_code, //Env('SALES_POINT_CODE')
+                    'CoverNoteStartDate' => formatDate($startdate),
                     'CoverNoteEndDate' => formatDate($trans->covernote_end_date),
                     'CoverNoteDesc' => $trans->covernote_desc,
                     'OperativeClause' => $trans->operative_clause,
@@ -101,8 +100,6 @@ class CoverNoteController extends Controller
 
             $content = parseArrayToXML($content, 'CoverNoteRefReq');
 
-            tiramisSentSave($trans->request_id, $content, $trans->customer->full_name);
-
             $response = APIClient($content, env('OTHER_COVERNOTE_URL'));
 
             $trans->acknowledgement_status_code = $response['CoverNoteRefReqAck']['AcknowledgementStatusCode'];
@@ -112,26 +109,20 @@ class CoverNoteController extends Controller
 
             if ($trans->acknowledgement_status_code !== STATUS_CODE){
                 $trans->request_id = generateRequestID();
-                $trans->covernote_number=rand(1,10).time().date('dHsi');
+                $trans->covernote_number=rand(10,100).time();
             }
 
-            if($trans->covernote_type != 3){
+            if($trans->covernote_type == 1){
                 $trans->created_at = date('Y-m-d H:i:s');
-                $trans->covernote_start_original_date = $CoverNoteStartDate;
             }
-            
-            $trans->covernote_start_date = $CoverNoteStartDate;
+
+            $trans->covernote_start_date = $startdate;
 
             $trans->save();
 
             return response()->json($response);
-        
        }
-       }
-       else
-       {
-        return 0;
-       }
+     }else{return 0;}
     }
 
     public function motorCoverNoteRefReq($id): JsonResponse
@@ -139,11 +130,9 @@ class CoverNoteController extends Controller
         $trans = $this->getTransaction($id);
         if($trans->insurance_type_id == 2){
         $trans->request_id = generateRequestID();
-        //checking if transaction is successful
-         if($trans->acknowledgement_status_code == "TIRA001" && $trans->acknowledgement_status_desc == "Successful"){
+         if($trans->acknowledgement_status_code == "TIRA001" && $trans->acknowledgement_status_desc == "Successful" && $trans->response_status_code == "TIRA001" && $trans->response_status_desc == "Successful"){
             return response()->json($trans);
          }else{
-
 
                 if(date_format(date_create($trans->covernote_start_date), 'Y-m-d') == date('Y-m-d'))
                 {
@@ -170,8 +159,8 @@ class CoverNoteController extends Controller
                     'CoverNoteDtl' => [
                         'CoverNoteNumber' => $trans->covernote_number,
                         'PrevCoverNoteReferenceNumber' => $trans->prev_covernote_reference_number,
-                        'SalePointCode' => $trans->sales_point_code,//env('SALES_POINT_CODE'),
-                        'CoverNoteStartDate' => $CoverNoteStartDate,
+                        'SalePointCode' => $trans->sales_point_code == "SP001" ? "SP588" : $trans->sales_point_code,//env('SALES_POINT_CODE'),
+                        'CoverNoteStartDate' => formatDate($startdate),
                         'CoverNoteEndDate' => formatDate($trans->covernote_end_date),
                         'CoverNoteDesc' => $trans->covernote_desc,
                         'OperativeClause' => $trans->operative_clause,
@@ -198,237 +187,38 @@ class CoverNoteController extends Controller
 
                 $content = parseArrayToXML($content, 'MotorCoverNoteRefReq');
 
-                tiramisSentSave($trans->request_id, $content, $trans->customer->full_name.'-'.$trans->registration_number);
-
                 $response = APIClient($content, env('MOTOR_COVERNOTE_URL'));
 
                 $trans->acknowledgement_status_code = $response['MotorCoverNoteRefReqAck']['AcknowledgementStatusCode'];
                 $trans->acknowledgement_status_desc = $response['MotorCoverNoteRefReqAck']['AcknowledgementStatusDesc'];
                 $trans->response_status_code="";
                 $trans->response_status_desc="";
-                
+
                 if ($trans->acknowledgement_status_code !== STATUS_CODE){
                     $trans->request_id = generateRequestID();
-                    $trans->covernote_number=rand(1,10).time().date('dHsi');
+                    $trans->covernote_number=rand(10,100).time();
                 }
-
-                if($trans->covernote_type != 3){
+                if($trans->covernote_type == 1){
                     $trans->created_at = date('Y-m-d H:i:s');
-                    $trans->covernote_start_original_date = $CoverNoteStartDate;
                 }
 
-                $trans->covernote_start_date = $CoverNoteStartDate;
-
+                $trans->covernote_start_date = $startdate;
                 $trans->save();
                 return response()->json($response);
         }
-        }
-        else
-        {
-            return 0;
-        }
+    }else{return 0;}
     }
-
-
-
-    public function motorCoverNoteFleetRefReq($fleetid)
-    {
-        $fleet = DB::table('transactions')->where('fleet_id_entry', $fleetid)->get();
-        foreach($fleet as $fleet_data){
-            $trans = $this->getTransaction($fleet_data->id);
-            $trans->request_id = generateRequestID();
-            //checking if transaction is successful
-            if($trans->acknowledgement_status_code != "TIRA001" && $trans->acknowledgement_status_desc != "Successful" && $trans->response_status_code != "TIRA001" && $trans->response_status_desc != "Successful"){
-
-                    if(date_format(date_create($trans->covernote_start_date), 'Y-m-d') == date('Y-m-d'))
-                    {
-                        $date = date_format(date_create($trans->covernote_start_date), 'Y-m-d');
-                        $time = date('H:i:s');
-                        $date_time = "$date"." "."$time";
-                        $date_time_cr = date_create($date_time);
-                        $add_minutes_start_date = date_add($date_time_cr,date_interval_create_from_date_string("1 minutes"));
-                        $startdate = date_format($add_minutes_start_date, 'Y-m-d H:i:s');
-
-                        $CoverNoteStartDate = formatDate($startdate);
-                    }else{
-                        $date = date_format(date_create($trans->covernote_start_date), 'Y-m-d');
-                        $date_time = "$date"." "."00:00:00";
-                        $date_time_cr = date_create($date_time);
-                        $add_minutes_start_date = date_add($date_time_cr,date_interval_create_from_date_string("1 minutes"));
-                        $startdates = date_format($add_minutes_start_date, 'Y-m-d H:i:s');
-
-                        $CoverNoteStartDate = formatDate($startdates);
-                    }
-
-                    $content = [
-                        'CoverNoteHdr' => $this->coverNoteHdr($trans),
-                        'CoverNoteDtl' => [
-                            'CoverNoteNumber' => $trans->covernote_number,
-                            'PrevCoverNoteReferenceNumber' => $trans->prev_covernote_reference_number,
-                            'SalePointCode' => $trans->sales_point_code,//env('SALES_POINT_CODE'),
-                            'CoverNoteStartDate' => $CoverNoteStartDate,
-                            'CoverNoteEndDate' => formatDate($trans->covernote_end_date),
-                            'CoverNoteDesc' => $trans->covernote_desc,
-                            'OperativeClause' => $trans->operative_clause,
-                            'PaymentMode' => $trans->payment_mode,
-                            'CurrencyCode' => $trans->currency_code,
-                            'ExchangeRate' => $trans->exchange_rate,
-                            'TotalPremiumExcludingTax' => $trans->total_premium_excluding_tax,
-                            'TotalPremiumIncludingTax' => $trans->total_premium_including_tax,
-                            'CommisionPaid' => $trans->commission_paid,
-                            'CommisionRate' => $trans->commission_rate,
-                            'OfficerName' => "{$trans->user->first_name} {$trans->user->last_name}",
-                            'OfficerTitle' => 'Agent',
-                            'ProductCode' => $trans->insuranceProduct->code,
-                            'EndorsementType' => $trans->endorsement_type,
-                            'EndorsementReason' => $trans->endorsement_reason,
-                            'EndorsementPremiumEarned' => $trans->endorsement_premium_earned,
-                            'RisksCovered' => $this->risksCovered($trans),
-                            'SubjectMattersCovered' => $this->subjectMattersCovered($trans),
-                            'CoverNoteAddons' => $this->coverNoteAddons($fleet_data->id),
-                            'PolicyHolders' => $this->policyHolders($trans),
-                            'MotorDtl' => $this->motorDtl($trans),
-                        ],
-                    ];
-
-                    $content = parseArrayToXML($content, 'MotorCoverNoteRefReq');
-
-                    tiramisSentSave($trans->request_id, $content, $trans->customer->full_name.'-'.$trans->registration_number);
-
-                    $response = APIClient($content, env('MOTOR_COVERNOTE_URL'));
-
-                    
-                    $trans->acknowledgement_status_code = $response['MotorCoverNoteRefReqAck']['AcknowledgementStatusCode'];
-                    $trans->acknowledgement_status_desc = $response['MotorCoverNoteRefReqAck']['AcknowledgementStatusDesc'];
-                    $trans->response_status_code="";
-                    $trans->response_status_desc="";
-                    
-                    if ($trans->acknowledgement_status_code !== STATUS_CODE){
-                        $trans->request_id = generateRequestID();
-                        $trans->covernote_number=rand(1,10).time().date('dHsi');
-                    }
-                    
-                    if($trans->covernote_type != 3){
-                        $trans->created_at = date('Y-m-d H:i:s');
-                        $trans->covernote_start_original_date = $CoverNoteStartDate;
-                    }
-                    $trans->covernote_start_date = $CoverNoteStartDate;
-
-                    $trans->save();
-
-                    logFleetResponse($response, $fleetid);
-                    
-            }
-        }
-        return 0;
-    }
-
-
-
-    public function nonmotorCoverNoteFleetRefReq($fleetid)
-    {
-        $fleet = DB::table('transactions')->where('fleet_id_entry', $fleetid)->get();
-        foreach($fleet as $fleet_data){
-            $trans = $this->getTransaction($fleet_data->id);
-            $trans->request_id = generateRequestID();
-            //checking if transaction is successful
-            if($trans->acknowledgement_status_code != "TIRA001" && $trans->acknowledgement_status_desc != "Successful" && $trans->response_status_code != "TIRA001" && $trans->response_status_desc != "Successful"){
-
-                    if(date_format(date_create($trans->covernote_start_date), 'Y-m-d') == date('Y-m-d'))
-                    {
-                        $date = date_format(date_create($trans->covernote_start_date), 'Y-m-d');
-                        $time = date('H:i:s');
-                        $date_time = "$date"." "."$time";
-                        $date_time_cr = date_create($date_time);
-                        $add_minutes_start_date = date_add($date_time_cr,date_interval_create_from_date_string("1 minutes"));
-                        $startdate = date_format($add_minutes_start_date, 'Y-m-d H:i:s');
-
-                        $CoverNoteStartDate = formatDate($startdate);
-                    }else{
-                        $date = date_format(date_create($trans->covernote_start_date), 'Y-m-d');
-                        $date_time = "$date"." "."00:00:00";
-                        $date_time_cr = date_create($date_time);
-                        $add_minutes_start_date = date_add($date_time_cr,date_interval_create_from_date_string("1 minutes"));
-                        $startdates = date_format($add_minutes_start_date, 'Y-m-d H:i:s');
-
-                        $CoverNoteStartDate = formatDate($startdates);
-                    }
-
-                    $content = [
-                        'CoverNoteHdr' => $this->coverNoteHdr($trans),
-                        'CoverNoteDtl' => [
-                            'CoverNoteNumber' => $trans->covernote_number,
-                            'PrevCoverNoteReferenceNumber' => $trans->prev_covernote_reference_number,
-                            'SalePointCode' => $trans->sales_point_code,//env('SALES_POINT_CODE')
-                            'CoverNoteStartDate' => $CoverNoteStartDate,
-                            'CoverNoteEndDate' => formatDate($trans->covernote_end_date),
-                            'CoverNoteDesc' => $trans->covernote_desc,
-                            'OperativeClause' => $trans->operative_clause,
-                            'PaymentMode' => $trans->payment_mode,
-                            'CurrencyCode' => $trans->currency_code,
-                            'ExchangeRate' => $trans->exchange_rate,
-                            'TotalPremiumExcludingTax' => $trans->total_premium_excluding_tax,
-                            'TotalPremiumIncludingTax' => $trans->total_premium_including_tax,
-                            'CommisionPaid' => $trans->commission_paid,
-                            'CommisionRate' => $trans->commission_rate,
-                            'OfficerName' => "{$trans->user->first_name} {$trans->user->last_name}",
-                            'OfficerTitle' => 'Agent',
-                            'ProductCode' => $trans->insuranceProduct->code,
-                            'EndorsementType' => $trans->endorsement_type,
-                            'EndorsementReason' => $trans->endorsement_reason,
-                            'EndorsementPremiumEarned' => $trans->endorsement_premium_earned,
-                            'RisksCovered' => $this->risksCovered($trans),
-                            'SubjectMattersCovered' => $this->subjectMattersCovered($trans),
-                            'CoverNoteAddons' => $this->coverNoteAddons($fleet_data->id),
-                            'PolicyHolders' => $this->policyHolders($trans),
-                        ],
-                    ];
-        
-                    $content = parseArrayToXML($content, 'CoverNoteRefReq');
-
-                    tiramisSentSave($trans->request_id, $content, $trans->customer->full_name.'-'.$trans->registration_number);
-        
-                    $response = APIClient($content, env('OTHER_COVERNOTE_URL'));
-        
-                    $trans->acknowledgement_status_code = $response['CoverNoteRefReqAck']['AcknowledgementStatusCode'];
-                    $trans->acknowledgement_status_desc = $response['CoverNoteRefReqAck']['AcknowledgementStatusDesc'];
-                    $trans->response_status_code="";
-                    $trans->response_status_desc="";
-        
-                    if ($trans->acknowledgement_status_code !== STATUS_CODE){
-                        $trans->request_id = generateRequestID();
-                        $trans->covernote_number=rand(1,10).time().date('dHsi');
-                    }
-                    
-                    if($trans->covernote_type != 3){
-                        $trans->created_at = date('Y-m-d H:i:s');
-                        $trans->covernote_start_original_date = $CoverNoteStartDate;
-                    }
-                    
-                    $trans->covernote_start_date = $CoverNoteStartDate;
-        
-                    $trans->save();
-        
-                   // return response()->json($response);
-
-                    logFleetResponse($response, $fleetid);
-                    
-            }
-        }
-        return 0;
-    }
-
 
     // --------------------------- Transaction Parameters ------------------------------- //
     public function coverNoteHdr(Transaction $trans): array
     {
         return [
             'RequestId' => $trans->request_id,
-            'CompanyCode' => env('COMPANY_CODE'),
-            'SystemCode' => env('SYSTEM_CODE'),
+            'CompanyCode' => env('COMPANY_CODE_N'),
+            'SystemCode' => env('SYSTEM_CODE_N'),
             'CallBackUrl' => env('TIRAMIS_CALLBACK_URL'),
-            'InsurerCompanyCode' => env('INSURER_COMPANY_CODE'),
-            'TranCompanyCode' => $trans->company_code,//env('TRAN_COMPANY_CODE'),
+            'InsurerCompanyCode' => env('INSURER_COMPANY_CODE_N'),
+            'TranCompanyCode' => $trans->sales_point_code == "SP001" ? "ICC101" : $trans->company_code,
             'CoverNoteType' => $trans->covernote_type,
         ];
     }
@@ -446,7 +236,7 @@ class CoverNoteController extends Controller
                     'PremiumAfterDiscount' => $trans->premium_after_discount,
                     'PremiumExcludingTaxEquivalent' => $trans->premium_excluding_tax_equivalent,
                     'PremiumIncludingTax' => $trans->premium_including_tax,
-                    'DiscountsOffered' => $this->coverNoteDiscount($trans),
+                    'DiscountsOffered' => [],
                     'TaxesCharged' => [
                         'TaxCharged' => [
                             'TaxCode' => $trans->tax_code,
@@ -505,29 +295,11 @@ class CoverNoteController extends Controller
     }
 
 
-    //17,336.30
-
-    public function coverNoteDiscount(Transaction $trans): array
-    {
-        if ($trans->premium_discount > 100) {
-                $discount_arr[] = [
-                    'DiscountType' => $trans->discount_type,
-                    'DiscountRate' => 0.00,
-                    'DiscountAmount' => $trans->premium_discount,
-                ];
-            
-            return ['DiscountOffered' => $discount_arr];
-
-        } else {
-            return [];
-        }
-    }
-
     public function policyHolders(Transaction $trans): array
     {
         return [
             'PolicyHolder' => [
-                'PolicyHolderName' => $trans->insurance_type_id == 2 ? $trans->owner_name : $trans->customer->full_name,
+                'PolicyHolderName' => $trans->customer->full_name,
                 'PolicyHolderBirthDate' => $trans->customer->birth_date,
                 'PolicyHolderType' => $trans->customer->customer_type,
                 'PolicyHolderIdNumber' => $trans->customer->id_number,
@@ -645,6 +417,102 @@ class CoverNoteController extends Controller
         return response()->json($response);
     }
 
+    public function motorCoverNoteFleetRefReq($fleetid)
+    {
+
+        $fleet = DB::table('transactions')->where('fleet_id_entry', $fleetid)->get();
+        foreach($fleet as $fleet_data){
+            $trans = $this->getTransaction($fleet_data->id);
+            $trans->request_id = generateRequestID();
+            //checking if transaction is successful
+            if($trans->acknowledgement_status_code != "TIRA001" && $trans->acknowledgement_status_desc != "Successful" && $trans->response_status_code != "TIRA001" && $trans->response_status_desc != "Successful"){
+
+                    if(date_format(date_create($trans->covernote_start_date), 'Y-m-d') == date('Y-m-d'))
+                    {
+                        $date = date_format(date_create($trans->covernote_start_date), 'Y-m-d');
+                        $time = date('H:i:s');
+                        $date_time = "$date"." "."$time";
+                        $date_time_cr = date_create($date_time);
+                        $add_minutes_start_date = date_add($date_time_cr,date_interval_create_from_date_string("1 minutes"));
+                        $startdate = date_format($add_minutes_start_date, 'Y-m-d H:i:s');
+
+                        $CoverNoteStartDate = formatDate($startdate);
+                    }else{
+                        $date = date_format(date_create($trans->covernote_start_date), 'Y-m-d');
+                        $date_time = "$date"." "."00:00:00";
+                        $date_time_cr = date_create($date_time);
+                        $add_minutes_start_date = date_add($date_time_cr,date_interval_create_from_date_string("1 minutes"));
+                        $startdates = date_format($add_minutes_start_date, 'Y-m-d H:i:s');
+
+                        $CoverNoteStartDate = formatDate($startdates);
+                    }
+
+                    $content = [
+                        'CoverNoteHdr' => $this->coverNoteHdr($trans),
+                        'CoverNoteDtl' => [
+                            'CoverNoteNumber' => $trans->covernote_number,
+                            'PrevCoverNoteReferenceNumber' => $trans->prev_covernote_reference_number,
+                            'SalePointCode' => $trans->sales_point_code == "SP001" ? "SP588" : $trans->sales_point_code,//env('SALES_POINT_CODE'),
+                            'CoverNoteStartDate' => $CoverNoteStartDate,
+                            'CoverNoteEndDate' => formatDate($trans->covernote_end_date),
+                            'CoverNoteDesc' => $trans->covernote_desc,
+                            'OperativeClause' => $trans->operative_clause,
+                            'PaymentMode' => $trans->payment_mode,
+                            'CurrencyCode' => $trans->currency_code,
+                            'ExchangeRate' => $trans->exchange_rate,
+                            'TotalPremiumExcludingTax' => $trans->total_premium_excluding_tax,
+                            'TotalPremiumIncludingTax' => $trans->total_premium_including_tax,
+                            'CommisionPaid' => $trans->commission_paid,
+                            'CommisionRate' => $trans->commission_rate,
+                            'OfficerName' => "{$trans->user->first_name} {$trans->user->last_name}",
+                            'OfficerTitle' => 'Agent',
+                            'ProductCode' => $trans->insuranceProduct->code,
+                            'EndorsementType' => $trans->endorsement_type,
+                            'EndorsementReason' => $trans->endorsement_reason,
+                            'EndorsementPremiumEarned' => $trans->endorsement_premium_earned,
+                            'RisksCovered' => $this->risksCovered($trans),
+                            'SubjectMattersCovered' => $this->subjectMattersCovered($trans),
+                            'CoverNoteAddons' => $this->coverNoteAddons($fleet_data->id),
+                            'PolicyHolders' => $this->policyHolders($trans),
+                            'MotorDtl' => $this->motorDtl($trans),
+                        ],
+                    ];
+
+                    $content = parseArrayToXML($content, 'MotorCoverNoteRefReq');
+
+                    $response = APIClient($content, env('MOTOR_COVERNOTE_URL'));
+
+
+                    $trans->acknowledgement_status_code = $response['MotorCoverNoteRefReqAck']['AcknowledgementStatusCode'];
+                    $trans->acknowledgement_status_desc = $response['MotorCoverNoteRefReqAck']['AcknowledgementStatusDesc'];
+                    $trans->response_status_code="";
+                    $trans->response_status_desc="";
+
+                    if ($trans->acknowledgement_status_code !== STATUS_CODE){
+                        $trans->request_id = generateRequestID();
+                        $trans->covernote_number=rand(1,10).time().date('dHsi');
+                    }
+
+                    if($trans->covernote_type == 1){
+                        $trans->created_at = date('Y-m-d H:i:s');
+                    }
+
+                    // if($trans->covernote_type != 3){
+                    //     $trans->covernote_start_original_date = $CoverNoteStartDate;
+                    // }
+                    $trans->covernote_start_date = $CoverNoteStartDate;
+
+                    $trans->save();
+
+                    //logFleetResponse($response, $fleetid);
+
+            }
+        }
+        return 0;
+    }
+
+
+
     public function motorVerificationReq(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -673,11 +541,103 @@ class CoverNoteController extends Controller
     }
 
 
+    public function nonmotorCoverNoteFleetRefReq($fleetid)
+    {
+        $fleet = DB::table('transactions')->where('fleet_id_entry', $fleetid)->get();
+        foreach($fleet as $fleet_data){
+            $trans = $this->getTransaction($fleet_data->id);
+            $trans->request_id = generateRequestID();
+            //checking if transaction is successful
+            if($trans->acknowledgement_status_code != "TIRA001" && $trans->acknowledgement_status_desc != "Successful" && $trans->response_status_code != "TIRA001" && $trans->response_status_desc != "Successful"){
+
+                if(date_format(date_create($trans->covernote_start_date), 'Y-m-d') == date('Y-m-d'))
+                {
+                    $date = date_format(date_create($trans->covernote_start_date), 'Y-m-d');
+                    $time = date('H:i:s');
+                    $date_time = "$date"." "."$time";
+                    $date_time_cr = date_create($date_time);
+                    $add_minutes_start_date = date_add($date_time_cr,date_interval_create_from_date_string("1 minutes"));
+                    $startdate = date_format($add_minutes_start_date, 'Y-m-d H:i:s');
+
+                    $CoverNoteStartDate = formatDate($startdate);
+                }else{
+                    $date = date_format(date_create($trans->covernote_start_date), 'Y-m-d');
+                    $date_time = "$date"." "."00:00:00";
+                    $date_time_cr = date_create($date_time);
+                    $add_minutes_start_date = date_add($date_time_cr,date_interval_create_from_date_string("1 minutes"));
+                    $startdates = date_format($add_minutes_start_date, 'Y-m-d H:i:s');
+
+                    $CoverNoteStartDate = formatDate($startdates);
+                }
+
+                $content = [
+                    'CoverNoteHdr' => $this->coverNoteHdr($trans),
+                    'CoverNoteDtl' => [
+                        'CoverNoteNumber' => $trans->covernote_number,
+                        'PrevCoverNoteReferenceNumber' => $trans->prev_covernote_reference_number,
+                        'SalePointCode' => $trans->sales_point_code,//env('SALES_POINT_CODE')
+                        'CoverNoteStartDate' => $CoverNoteStartDate,
+                        'CoverNoteEndDate' => formatDate($trans->covernote_end_date),
+                        'CoverNoteDesc' => $trans->covernote_desc,
+                        'OperativeClause' => $trans->operative_clause,
+                        'PaymentMode' => $trans->payment_mode,
+                        'CurrencyCode' => $trans->currency_code,
+                        'ExchangeRate' => $trans->exchange_rate,
+                        'TotalPremiumExcludingTax' => $trans->total_premium_excluding_tax,
+                        'TotalPremiumIncludingTax' => $trans->total_premium_including_tax,
+                        'CommisionPaid' => $trans->commission_paid,
+                        'CommisionRate' => $trans->commission_rate,
+                        'OfficerName' => "{$trans->user->first_name} {$trans->user->last_name}",
+                        'OfficerTitle' => 'Agent',
+                        'ProductCode' => $trans->insuranceProduct->code,
+                        'EndorsementType' => $trans->endorsement_type,
+                        'EndorsementReason' => $trans->endorsement_reason,
+                        'EndorsementPremiumEarned' => $trans->endorsement_premium_earned,
+                        'RisksCovered' => $this->risksCovered($trans),
+                        'SubjectMattersCovered' => $this->subjectMattersCovered($trans),
+                        'CoverNoteAddons' => $this->coverNoteAddons($fleet_data->id),
+                        'PolicyHolders' => $this->policyHolders($trans),
+                    ],
+                ];
+
+                $content = parseArrayToXML($content, 'CoverNoteRefReq');
+
+                tiramisSentSave($trans->request_id, $content, $trans->customer->full_name.'-'.$trans->registration_number);
+
+                $response = APIClient($content, env('OTHER_COVERNOTE_URL'));
+
+                $trans->acknowledgement_status_code = $response['CoverNoteRefReqAck']['AcknowledgementStatusCode'];
+                $trans->acknowledgement_status_desc = $response['CoverNoteRefReqAck']['AcknowledgementStatusDesc'];
+                $trans->response_status_code="";
+                $trans->response_status_desc="";
+
+                if ($trans->acknowledgement_status_code !== STATUS_CODE){
+                    $trans->request_id = generateRequestID();
+                    $trans->covernote_number=rand(1,10).time().date('dHsi');
+                }
+
+                if($trans->covernote_type != 3){
+                    $trans->created_at = date('Y-m-d H:i:s');
+                    $trans->covernote_start_original_date = $CoverNoteStartDate;
+                }
+
+                $trans->covernote_start_date = $CoverNoteStartDate;
+
+                $trans->save();
+
+                // return response()->json($response);
+
+                //logFleetResponse($response, $fleetid);
+
+            }
+        }
+        return 0;
+    }
 
 
 
     //fleet function
-    public function motorCoverNoteRefReqWithFleet($id)
+   /* public function motorCoverNoteRefReqWithFleet($id)
     {
         $trans = $this->getTransaction($id);
         $fleet_entry = FleetEntry::where('transaction_id', $id)->get();
@@ -689,8 +649,8 @@ class CoverNoteController extends Controller
                 'SystemCode' => env('SYSTEM_CODE'),
                 'CallBackUrl' => env('FLEET_CALLBACK_URL'),
                 'InsurerCompanyCode' => env('INSURER_COMPANY_CODE'),
-                'TranCompanyCode' => env('TRAN_COMPANY_CODE'),
-                'CoverNoteType' => $trans->	covernote_type,
+                'TranCompanyCode' => $trans->sales_point_code == "SP001" ? "ICC101" : $trans->company_code,
+                'CoverNoteType' => $trans->covernote_type,
             ],
             'CoverNoteDtl' => [
                 'FleetHdr' => [
@@ -698,7 +658,7 @@ class CoverNoteController extends Controller
                     'FleetType' => $trans->fleet_type,
                     'FleetSize' => $trans->fleet_size,
                     'ComprehensiveInsured' => $this->comprensiveCount($id),
-                    'SalePointCode' => $trans->sales_point_code,
+                    'SalePointCode' => $trans->sales_point_code == "SP001" ? "SP588" : $trans->sales_point_code,
                     'CoverNoteStartDate' => formatDate($trans->covernote_start_date),
                     'CoverNoteEndDate' => formatDate($trans->covernote_end_date),
                     'PaymentMode' => $trans->payment_mode,
@@ -725,21 +685,21 @@ class CoverNoteController extends Controller
         $trans->acknowledgement_status_desc = $response['MotorCoverNoteRefReqAck']['AcknowledgementStatusDesc'];
         $trans->response_status_code="";
         $trans->response_status_desc="";
-        
+
         if ($trans->acknowledgement_status_code !== STATUS_CODE){
              $trans->request_id = generateRequestID();
-             $trans->covernote_number=rand(1,10).time().date('dHsi');
+             $trans->covernote_number=rand(10,100).time();
         }
         $trans->save();
         return response()->json($response);
 
-    }
+    }*/
 
 
     public function fleetDtl($fleet)
     {
         $results = $fleet->map(function ($item, $key) use ($fleet) {
-            
+
             $item->entry = $key + 1;
             $item->save();
 
@@ -830,7 +790,7 @@ class CoverNoteController extends Controller
         ];
     }
 
-
+/*
     public function processFleetCallback(Request $request)
     {
         $callback = $this->parseXMLtoArray($request->getContent());
@@ -838,13 +798,13 @@ class CoverNoteController extends Controller
         if ($callback['MotorCoverNoteRefRes']['FleetResHdr']['FleetStatusCode'] == TIRA_SUCCESS_CODE) {
             foreach ($callback['MotorCoverNoteRefRes']['FleetResDtl'] as $item) {
                 $fleet_entry = FleetEntry::firstWhere('cover_note_number', $item['CoverNoteNumber']);
-        
+
                 if ($fleet_entry) {
                     $fleet_entry->response_id = $callback['MotorCoverNoteRefRes']['FleetResHdr']['ResponseId'];
                     $fleet_entry->response_status_code = $item['ResponseStatusCode'];
                     $fleet_entry->response_status_desc = $item['ResponseStatusDesc'];
                     $fleet_entry->response_timestamp = now();
-        
+
                     switch ($item['ResponseStatusCode']) {
                         case TIRA_SUCCESS_CODE :
                             $fleet_entry->reference_number = $item['CoverNoteReferenceNumber'];
@@ -857,7 +817,7 @@ class CoverNoteController extends Controller
                     $fleet_entry->save();
                 }
             }
-        
+
         }
 
         unset($callback['MsgSignature']);
@@ -875,7 +835,7 @@ class CoverNoteController extends Controller
 
         return response($acknowledgement, 200, ['Content-Type' => 'application/xml']);
     }
-
+*/
 
     public function parseArrayToXML(array $data, string $rootElement): string
     {

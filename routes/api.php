@@ -132,6 +132,8 @@ Route::post('get-Token', [AuthController::class,'getToken']);
 
 Route::post('login', [AuthController::class,'login']);
 
+Route::post('/callback-tira', CallbackController::class);
+
 Route::post('/callback',[PaymentController::class,'callback']);
 
 Route::post('/callbackHealth',[PaymentController::class,'callbackHealth']);

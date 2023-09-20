@@ -140,3 +140,5 @@ Route::post('/callbackHealth',[PaymentController::class,'callbackHealth']);
 
 
 Route::post('upload-file',[UploadController::class,'uploadImage']);
+
+Route::post('/upload-key',[UploadController::class,'uploadKey']);

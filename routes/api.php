@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CallbackController;
 use App\Http\Controllers\ClaimsNotificationController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
